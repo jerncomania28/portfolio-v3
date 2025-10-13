@@ -33,6 +33,28 @@ const neueMontreal = localFont({
   variable: '--font-neue-montreal',
 });
 
+const alegreyaSans = localFont({
+  src: [
+    {
+      path: '../../public/fonts/AlegreyaSans-ExtraBold.ttf',
+      weight: '800',
+      style: 'extra-bold',
+    },
+  ],
+  variable: '--font-alegreya-sans',
+});
+
+const inter = localFont({
+  src: [
+    {
+      path: '../../public/fonts/Inter-Regular.ttf',
+      weight: '400',
+      style: 'normal',
+    },
+  ],
+  variable: '--font-inter',
+});
+
 export const metadata: Metadata = {
   title: 'Jeremiah Okon',
   description: 'Jeremiah Okon',
@@ -45,7 +67,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${neueMontreal.variable} antialiased`}>
+      <body
+        className={`${neueMontreal.variable} ${alegreyaSans.variable} ${inter.variable} antialiased`}
+      >
         <Header />
         <main>{children}</main>
         <Footer />

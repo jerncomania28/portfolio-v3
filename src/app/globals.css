@@ -74,6 +74,9 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  --font-family-sans: var(--font-neue-montreal);
+  --font-family-alegreya: var(--font-alegreya-sans);
+  --font-family-inter: var(--font-inter);
 }
 
 @custom-variant dark (&:where(.dark, .dark *));
