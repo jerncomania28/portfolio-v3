@@ -1,37 +1,125 @@
+'use client';
+
+import { useRef, useState } from 'react';
+import Image from 'next/image';
+
+import { motion, useInView } from 'motion/react';
+
+import { CalendlyModal } from '@/components/calendly-modal';
+
+import { BOOK_A_CALL } from '@/lib/constant';
+
 export default function About() {
+  const [isCalendlyOpen, setIsCalendlyOpen] = useState(false);
+
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, amount: 0.3 });
+
+  const fadeInUp = {
+    hidden: { opacity: 0, y: 40 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6, ease: 'easeOut' as const },
+    },
+  };
+
+  const scaleIn = {
+    hidden: { opacity: 0, scale: 0.8 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: {
+        duration: 0.8,
+        ease: [0.22, 1, 0.36, 1] as const,
+      },
+    },
+  };
+
   return (
-    <section className="relative flex h-[85vh] w-full flex-col px-4 py-8 md:px-10">
-      <div className="relative flex h-[136px] w-full items-center gap-1 text-[#2C3333] md:h-[432px]">
-        <h1 className="text-[114px] leading-[100%] font-bold tracking-tighter md:text-[200px] lg:text-[280px] xl:text-[360px]">
+    <section
+      id="about"
+      ref={ref}
+      className="relative flex min-h-screen w-full snap-start flex-col px-4 py-16 md:px-10 md:py-24"
+    >
+      <motion.div
+        className="relative mb-12 flex h-auto w-full items-center gap-2 overflow-hidden text-[#2C3333] md:mb-20 md:gap-4"
+        initial="hidden"
+        animate={isInView ? 'visible' : 'hidden'}
+        variants={scaleIn}
+      >
+        <h1 className="text-[120px] leading-[100%] font-bold tracking-tighter md:text-[220px] lg:text-[320px] xl:text-[420px] 2xl:text-[500px]">
           Hello
         </h1>
-        <div className="relative h-[67px] w-[63px] rounded-full border-4 border-white bg-gray-100 md:h-[212px] md:w-[200px]">
-          <div
-            className="font-family-alegreya absolute top-[14px] left-[48px] w-fit rounded-full bg-white p-2 text-[8px] leading-[100%] tracking-tighter whitespace-nowrap md:top-[46px] md:left-[155px] md:p-4 md:text-xl"
+        <div className="relative flex-shrink-0 cursor-pointer">
+          <motion.div
+            className="relative h-[80px] w-[75px] overflow-hidden rounded-full border-4 border-white bg-gray-100 md:h-[240px] md:w-[220px]"
+            whileHover={{
+              rotate: [0, -10, 10, -10, 0],
+              transition: { duration: 0.5 },
+            }}
+          >
+            <Image
+              src="/assets/profile.jpg"
+              fill
+              alt="profile"
+              className="object-cover"
+              sizes="(max-width: 768px) 80px, 240px"
+              priority
+            />
+          </motion.div>
+          <motion.div
+            className="font-family-alegreya absolute -top-2 -right-3 w-fit rounded-full bg-white p-2 text-[8px] leading-[100%] tracking-tighter whitespace-nowrap shadow-md md:-top-4 md:-right-6 md:p-4 md:text-xl"
             style={{ transform: 'rotate(-5deg)' }}
+            whileHover={{ scale: 1.1, rotate: 0 }}
+            transition={{ type: 'spring', stiffness: 300 }}
           >
             Jeremiah Okon👋🏿
-          </div>
+          </motion.div>
         </div>
-      </div>
+      </motion.div>
+
       <div className="relative flex w-full flex-col items-start justify-between gap-10 text-[#2C3333] md:flex-row md:gap-0">
-        <p className="font-family-inter text-[18px] font-normal md:max-w-[508px]">
+        <motion.p
+          className="font-family-inter text-[18px] leading-relaxed font-normal md:max-w-[508px] md:text-[18px]"
+          initial="hidden"
+          animate={isInView ? 'visible' : 'hidden'}
+          variants={fadeInUp}
+          transition={{ delay: 0.2 }}
+        >
           My name is Jeremiah, and I&apos;m a front-end developer who crafts
           websites with a strong emphasis on seamless animations and engaging
           user interactions. I&apos;m here to transform your ideas into reality,
           delivering originality and excellence to the online world.
-        </p>
+        </motion.p>
 
-        <div className="flex w-full flex-col items-center gap-6 md:w-auto md:items-end">
+        <motion.div
+          className="flex w-full flex-col items-center gap-6 md:w-auto md:items-end"
+          initial="hidden"
+          animate={isInView ? 'visible' : 'hidden'}
+          variants={fadeInUp}
+          transition={{ delay: 0.4 }}
+        >
           <span className="font-family-inter max-w-[127px] self-end text-right text-sm md:max-w-[200px] md:text-[18px]">
             Let&apos;s make your website standout.
           </span>
 
-          <span className="py-2 font-bold uppercase underline">
+          <motion.span
+            className="cursor-pointer py-2 font-bold uppercase underline"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setIsCalendlyOpen(true)}
+          >
             Ask Me Anything
-          </span>
-        </div>
+          </motion.span>
+        </motion.div>
       </div>
+
+      <CalendlyModal
+        isOpen={isCalendlyOpen}
+        onClose={() => setIsCalendlyOpen(false)}
+        url={BOOK_A_CALL}
+      />
     </section>
   );
 }

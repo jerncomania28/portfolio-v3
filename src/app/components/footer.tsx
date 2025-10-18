@@ -1,42 +1,175 @@
-import Link from 'next/link';
+'use client';
+
+import { useRef, useState } from 'react';
+
+import { ChevronUp } from 'lucide-react';
+import { motion, useInView } from 'motion/react';
 
 export default function Footer() {
-  return (
-    <footer className="bg-footer-background text-background relative flex w-full flex-col items-center justify-center gap-20 px-4 py-10 md:px-10 md:py-20">
-      <span className="text-center text-[75px] leading-[100%] font-bold tracking-tighter md:text-[125px] lg:text-[164px]">
-        Let&apos;s Create Magic!
-      </span>
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, amount: 0.2 });
+  const [isEmailHovered, setIsEmailHovered] = useState(false);
 
-      <div className="relative flex w-full flex-col items-center justify-center gap-6">
-        <div className="text-xl font-medium lg:absolute lg:top-0 lg:right-0">
+  const handleScrollToTop = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const headingVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.8,
+        ease: [0.22, 1, 0.36, 1] as const,
+      },
+    },
+  };
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.3,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: 'easeOut' as const,
+      },
+    },
+  };
+
+  const socialLinks = [
+    { name: 'Linkedin', url: 'https://www.linkedin.com/in/okon-jeremiah/' },
+    { name: 'Github', url: 'https://github.com/jerncomania28' },
+  ];
+
+  return (
+    <footer
+      ref={ref}
+      className="bg-footer-background text-background relative flex w-full flex-col items-center justify-center gap-20 px-4 py-10 md:px-10 md:py-20"
+    >
+      {/* Main Heading with Gradient Animation */}
+      <motion.span
+        className="bg-gradient-to-r from-white via-gray-100 to-white bg-clip-text text-center text-[75px] leading-[100%] font-bold tracking-tighter md:text-[125px] lg:text-[164px]"
+        variants={headingVariants}
+        initial="hidden"
+        animate={isInView ? 'visible' : 'hidden'}
+      >
+        Let&apos;s Create Magic!
+      </motion.span>
+
+      <motion.div
+        className="relative flex w-full flex-col items-center justify-center gap-6"
+        variants={containerVariants}
+        initial="hidden"
+        animate={isInView ? 'visible' : 'hidden'}
+      >
+        {/* Scroll to Top - Enhanced with Icon */}
+        <motion.div
+          className="text-xl font-medium lg:absolute lg:top-0 lg:right-0"
+          variants={itemVariants}
+        >
           <span className="leading-[100%]"> I Scrolled too far, </span>
-          <Link href="#" className="leading-[100%] underline">
+          <motion.a
+            href="#"
+            onClick={handleScrollToTop}
+            className="group inline-flex items-center gap-2 leading-[100%] underline"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
             send me up
-          </Link>
-        </div>
+            <motion.div
+              animate={{ y: [0, -4, 0] }}
+              transition={{
+                duration: 1.5,
+                repeat: Infinity,
+                ease: 'easeInOut',
+              }}
+            >
+              <ChevronUp className="h-5 w-5 transition-colors group-hover:text-gray-300" />
+            </motion.div>
+          </motion.a>
+        </motion.div>
 
         <div className="flex flex-col items-center justify-center gap-6">
-          <Link href="mailto:okonjeremiahprogs@gmail.com" target="_blannk">
-            okonjeremiahprogs@gmail.com
-          </Link>
-
-          <ul className="flex flex-col gap-3">
-            <Link
-              href="https://www.linkedin.com/in/okon-jeremiah/"
+          {/* Email with Magnetic Effect */}
+          <motion.div variants={itemVariants}>
+            <motion.a
+              href="mailto:okonjeremiahprogs@gmail.com"
               target="_blank"
+              className="relative text-2xl font-medium md:text-3xl"
+              onMouseEnter={() => setIsEmailHovered(true)}
+              onMouseLeave={() => setIsEmailHovered(false)}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
-              <li>Linkedin</li>
-            </Link>
-            <Link href="https://github.com/jerncomania28" target="_blank">
-              <li>Github</li>
-            </Link>
-          </ul>
-        </div>
-      </div>
+              <motion.span
+                className="relative z-10"
+                animate={{
+                  color: isEmailHovered ? '#d1d5db' : '#ffffff',
+                }}
+                transition={{ duration: 0.3 }}
+              >
+                okonjeremiahprogs@gmail.com
+              </motion.span>
+              <motion.div
+                className="absolute inset-0 -z-0 rounded-lg bg-white/10"
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{
+                  scale: isEmailHovered ? 1 : 0,
+                  opacity: isEmailHovered ? 1 : 0,
+                }}
+                transition={{ duration: 0.3 }}
+              />
+            </motion.a>
+          </motion.div>
 
-      <span className="text-center text-xs leading-[100%] font-medium uppercase md:text-base">
+          {/* Social Links with Stagger Animation */}
+          <motion.ul
+            className="flex flex-col items-center gap-3"
+            variants={containerVariants}
+          >
+            {socialLinks.map((link) => (
+              <motion.li key={link.name} variants={itemVariants}>
+                <a
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group relative inline-block pb-1 text-lg md:text-xl"
+                >
+                  <span className="relative">
+                    {link.name}
+                    <span className="absolute bottom-0 left-0 h-[2px] w-full origin-left scale-x-0 bg-white transition-transform duration-300 ease-out group-hover:scale-x-100" />
+                  </span>
+                </a>
+              </motion.li>
+            ))}
+          </motion.ul>
+        </div>
+      </motion.div>
+
+      {/* Copyright with Fade In */}
+      <motion.span
+        className="text-center text-xs leading-[100%] font-medium uppercase opacity-60 md:text-base"
+        variants={itemVariants}
+        initial="hidden"
+        animate={isInView ? 'visible' : 'hidden'}
+        transition={{ delay: 0.6 }}
+      >
         All rights reserved &copy; 2025 • Jeremiah Okon
-      </span>
+      </motion.span>
     </footer>
   );
 }
