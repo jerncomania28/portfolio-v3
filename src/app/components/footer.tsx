@@ -2,13 +2,18 @@
 
 import { useRef, useState } from 'react';
 
-import { ChevronUp } from 'lucide-react';
+import { Calendar, ChevronUp } from 'lucide-react';
 import { motion, useInView } from 'motion/react';
+
+import { BOOK_A_CALL } from '@/lib/constant';
+
+import { CalendlyModal } from './calendly-modal';
 
 export default function Footer() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.2 });
   const [isEmailHovered, setIsEmailHovered] = useState(false);
+  const [isCalendlyOpen, setIsCalendlyOpen] = useState(false);
 
   const handleScrollToTop = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
@@ -61,14 +66,71 @@ export default function Footer() {
       className="bg-footer-background text-background relative flex w-full flex-col items-center justify-center gap-20 px-4 py-10 md:px-10 md:py-20"
     >
       {/* Main Heading with Gradient Animation */}
-      <motion.span
-        className="bg-gradient-to-r from-white via-gray-100 to-white bg-clip-text text-center text-[75px] leading-[100%] font-bold tracking-tighter md:text-[125px] lg:text-[164px]"
-        variants={headingVariants}
-        initial="hidden"
-        animate={isInView ? 'visible' : 'hidden'}
-      >
-        Let&apos;s Create Magic!
-      </motion.span>
+      <div className="flex w-full flex-col items-center gap-8">
+        <motion.span
+          className="bg-gradient-to-r from-white via-gray-100 to-white bg-clip-text text-center text-[75px] leading-[100%] font-bold tracking-tighter md:text-[125px] lg:text-[164px]"
+          variants={headingVariants}
+          initial="hidden"
+          animate={isInView ? 'visible' : 'hidden'}
+        >
+          Let&apos;s Create Magic!
+        </motion.span>
+
+        {/* CTA Button */}
+        <motion.button
+          onClick={() => setIsCalendlyOpen(true)}
+          className="group relative overflow-hidden rounded-full bg-white px-10 py-5 text-[#0F172A] shadow-2xl transition-all duration-300 hover:shadow-[0_0_60px_rgba(255,255,255,0.4)] md:px-12 md:py-6"
+          variants={headingVariants}
+          initial="hidden"
+          animate={isInView ? 'visible' : 'hidden'}
+          whileHover={{ scale: 1.05, y: -4 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          {/* Animated gradient background */}
+          <motion.div
+            className="absolute inset-0 bg-gradient-to-r from-white via-gray-100 to-white"
+            animate={{
+              backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
+            }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+              ease: 'linear',
+            }}
+            style={{
+              backgroundSize: '200% 100%',
+            }}
+          />
+
+          <span className="relative z-10 flex items-center gap-3 text-xl font-black tracking-wide uppercase md:text-2xl">
+            <motion.div
+              animate={{
+                scale: [1, 1.2, 1],
+                rotate: [0, 5, -5, 0],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                ease: 'easeInOut',
+              }}
+            >
+              <Calendar className="h-7 w-7 md:h-8 md:w-8" />
+            </motion.div>
+            Book a Free Call
+          </span>
+
+          {/* Ripple effect on hover */}
+          <motion.div
+            className="absolute inset-0 rounded-full bg-white/50"
+            initial={{ scale: 0, opacity: 0.5 }}
+            whileHover={{
+              scale: 2,
+              opacity: 0,
+              transition: { duration: 0.6 },
+            }}
+          />
+        </motion.button>
+      </div>
 
       <motion.div
         className="relative flex w-full flex-col items-center justify-center gap-6"
@@ -170,6 +232,13 @@ export default function Footer() {
       >
         All rights reserved &copy; 2025 • Jeremiah Okon
       </motion.span>
+
+      <CalendlyModal
+        isOpen={isCalendlyOpen}
+        onClose={() => setIsCalendlyOpen(false)}
+        url={BOOK_A_CALL}
+        title="Let's Chat - Book Your Free Call"
+      />
     </footer>
   );
 }

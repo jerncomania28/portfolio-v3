@@ -1,5 +1,6 @@
 import { Playfair_Display } from 'next/font/google';
 import localFont from 'next/font/local';
+import { GoogleAnalytics } from '@next/third-parties/google';
 
 import type { Metadata } from 'next';
 
@@ -188,6 +189,7 @@ export default function RootLayout({
           src="https://assets.calendly.com/assets/external/widget.js"
           async
         />
+        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID!} />
       </body>
     </html>
   );

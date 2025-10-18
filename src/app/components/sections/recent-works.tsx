@@ -56,6 +56,7 @@ const projects: Project[] = [
 export default function RecentWorks() {
   const [hoveredProject, setHoveredProject] = useState<number | null>(null);
   const ref = useRef(null);
+  const projectRefs = useRef<{ [key: number]: HTMLAnchorElement | null }>({});
   const isInView = useInView(ref, { once: true, amount: 0.2 });
 
   // Motion values for smooth cursor tracking
@@ -67,11 +68,33 @@ export default function RecentWorks() {
   const imageX = useSpring(mouseX, springConfig);
   const imageY = useSpring(mouseY, springConfig);
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    // Update motion values - image will follow smoothly via spring physics
-    mouseX.set(e.clientX - rect.left);
-    mouseY.set(e.clientY - rect.top);
+  const handleMouseMove = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    projectId: number
+  ) => {
+    const projectElement = projectRefs.current[projectId];
+    if (!projectElement) return;
+
+    const rect = projectElement.getBoundingClientRect();
+
+    // Get mouse position relative to the project element
+    const relativeX = e.clientX - rect.left;
+    const relativeY = e.clientY - rect.top;
+
+    // Constrain the image to stay within the project area with some padding
+    const padding = 100; // pixels of wiggle room
+    const clampedX = Math.max(
+      -padding,
+      Math.min(rect.width + padding, relativeX)
+    );
+    const clampedY = Math.max(
+      -padding,
+      Math.min(rect.height + padding, relativeY)
+    );
+
+    // Set position as absolute coordinates (viewport-based)
+    mouseX.set(rect.left + clampedX);
+    mouseY.set(rect.top + clampedY);
   };
 
   const containerVariants = {
@@ -126,7 +149,6 @@ export default function RecentWorks() {
       {/* Projects List */}
       <motion.div
         className="relative my-6 flex w-full flex-col gap-4 px-4 md:my-12 md:gap-10 md:px-10"
-        onMouseMove={handleMouseMove}
         variants={containerVariants}
         initial="hidden"
         animate={isInView ? 'visible' : 'hidden'}
@@ -134,11 +156,15 @@ export default function RecentWorks() {
         {projects.map((project) => (
           <motion.div key={project.id} variants={itemVariants}>
             <Link
+              ref={(el) => {
+                projectRefs.current[project.id] = el;
+              }}
               href={project.link as string}
               target="_blank"
               className="group relative flex items-center gap-4 py-4 transition-all duration-300"
               onMouseEnter={() => setHoveredProject(project.id)}
               onMouseLeave={() => setHoveredProject(null)}
+              onMouseMove={(e) => handleMouseMove(e, project.id)}
             >
               {/* Project Name */}
               <motion.h3
@@ -191,7 +217,7 @@ export default function RecentWorks() {
             exit={{ opacity: 0, scale: 0.8 }}
             transition={{ opacity: { duration: 0.2 } }}
           >
-            <div className="relative h-[400px] w-[800px] overflow-hidden rounded-md bg-white">
+            <div className="relative h-[400px] w-[800px] overflow-hidden rounded-md bg-white shadow-2xl">
               {projects
                 .filter((p) => p.id === hoveredProject)
                 .map((project) => (
