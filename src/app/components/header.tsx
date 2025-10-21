@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { sendGAEvent } from '@next/third-parties/google';
 
 import { SlashIcon, X } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
@@ -64,6 +65,15 @@ export default function Header() {
             href="mailto:okonjeremiahprogs@gmail.com"
             target="_blank"
             className="text-footer-background hidden text-xl leading-[100%] font-medium -tracking-[1%] md:inline-block"
+            onClick={() => {
+              sendGAEvent({
+                event: 'email_click',
+                value: 'okonjeremiahprogs@gmail.com',
+                click_location: 'header',
+                event_category: 'engagement',
+                event_label: 'contact_email',
+              });
+            }}
           >
             okonjeremiahprogs@gmail.com
           </Link>

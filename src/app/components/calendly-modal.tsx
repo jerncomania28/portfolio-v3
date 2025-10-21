@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { sendGAEvent } from '@next/third-parties/google';
 
 import {
   Dialog,
@@ -69,6 +70,15 @@ export const CalendlyModal = ({
     };
 
     if (isOpen) {
+      // Track modal open event
+      sendGAEvent({
+        event: 'calendly_modal_open',
+        value: title,
+        modal_action: 'open',
+        event_category: 'engagement',
+        event_label: 'calendly_booking',
+      });
+
       setIsLoading(true);
       setError(null);
       initializeCalendly();
@@ -77,10 +87,22 @@ export const CalendlyModal = ({
     return () => {
       if (timeoutId) clearTimeout(timeoutId);
     };
-  }, [isOpen, url]);
+  }, [isOpen, url, title]);
+
+  const handleClose = () => {
+    // Track modal close event
+    sendGAEvent({
+      event: 'calendly_modal_close',
+      value: title,
+      modal_action: 'close',
+      event_category: 'engagement',
+      event_label: 'calendly_booking',
+    });
+    onClose();
+  };
 
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()} modal>
+    <Dialog open={isOpen} onOpenChange={(open) => !open && handleClose()} modal>
       <DialogContent className="max-h-[95vh] w-[calc(100vw-2rem)] max-w-5xl overflow-hidden p-0 md:max-h-[90vh] md:w-full">
         <DialogHeader className="border-b p-4 pb-3 md:p-6 md:pb-4">
           <DialogTitle className="text-lg font-semibold md:text-xl">

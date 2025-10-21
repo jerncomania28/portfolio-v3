@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
+import { sendGAEvent } from '@next/third-parties/google';
 
 import { Calendar, ChevronUp } from 'lucide-react';
 import { motion, useInView } from 'motion/react';
@@ -78,7 +79,16 @@ export default function Footer() {
 
         {/* CTA Button */}
         <motion.button
-          onClick={() => setIsCalendlyOpen(true)}
+          onClick={() => {
+            sendGAEvent({
+              event: 'book_call_click',
+              value: 'Book a Free Call',
+              button_location: 'footer',
+              event_category: 'conversion',
+              event_label: 'cta_button',
+            });
+            setIsCalendlyOpen(true);
+          }}
           className="group relative overflow-hidden rounded-full bg-white px-10 py-5 text-[#0F172A] shadow-2xl transition-all duration-300 hover:shadow-[0_0_60px_rgba(255,255,255,0.4)] md:px-12 md:py-6"
           variants={headingVariants}
           initial="hidden"
@@ -176,6 +186,15 @@ export default function Footer() {
               onMouseLeave={() => setIsEmailHovered(false)}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
+              onClick={() => {
+                sendGAEvent({
+                  event: 'email_click',
+                  value: 'okonjeremiahprogs@gmail.com',
+                  click_location: 'footer',
+                  event_category: 'engagement',
+                  event_label: 'contact_email',
+                });
+              }}
             >
               <motion.span
                 className="relative z-10"
@@ -210,6 +229,16 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group relative inline-block pb-1 text-lg md:text-xl"
+                  onClick={() => {
+                    sendGAEvent({
+                      event: 'social_click',
+                      value: link.name,
+                      social_platform: link.name,
+                      social_url: link.url,
+                      event_category: 'engagement',
+                      event_label: 'footer_social_links',
+                    });
+                  }}
                 >
                   <span className="relative">
                     {link.name}

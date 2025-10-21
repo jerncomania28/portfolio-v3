@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { sendGAEvent } from '@next/third-parties/google';
 
 import { Calendar } from 'lucide-react';
 import { motion } from 'motion/react';
@@ -83,7 +84,16 @@ export default function Hero() {
       >
         {/* CTA Button - Left side on desktop */}
         <motion.button
-          onClick={() => setIsCalendlyOpen(true)}
+          onClick={() => {
+            sendGAEvent({
+              event: 'book_call_click',
+              value: 'Book a Free Call',
+              button_location: 'hero',
+              event_category: 'conversion',
+              event_label: 'cta_button',
+            });
+            setIsCalendlyOpen(true);
+          }}
           className="bg-footer-background group relative overflow-hidden rounded-full px-10 py-5 text-white shadow-2xl transition-all duration-300 hover:shadow-[0_0_60px_rgba(123,182,221,0.4)] md:px-12 md:py-6"
           whileHover={{ scale: 1.05, y: -4 }}
           whileTap={{ scale: 0.95 }}

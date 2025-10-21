@@ -2,6 +2,7 @@
 
 import { useRef, useState } from 'react';
 import Image from 'next/image';
+import { sendGAEvent } from '@next/third-parties/google';
 
 import { motion, useInView } from 'motion/react';
 
@@ -108,7 +109,16 @@ export default function About() {
             className="cursor-pointer py-2 font-bold uppercase underline"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => setIsCalendlyOpen(true)}
+            onClick={() => {
+              sendGAEvent({
+                event: 'book_call_click',
+                value: 'Ask Me Anything',
+                button_location: 'about',
+                event_category: 'conversion',
+                event_label: 'ask_me_anything',
+              });
+              setIsCalendlyOpen(true);
+            }}
           >
             Ask Me Anything
           </motion.span>

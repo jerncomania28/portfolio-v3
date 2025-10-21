@@ -3,6 +3,7 @@
 import { useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { sendGAEvent } from '@next/third-parties/google';
 
 import { Separator } from '@radix-ui/react-separator';
 import { motion, useInView, useMotionValue, useSpring } from 'motion/react';
@@ -165,6 +166,16 @@ export default function RecentWorks() {
               onMouseEnter={() => setHoveredProject(project.id)}
               onMouseLeave={() => setHoveredProject(null)}
               onMouseMove={(e) => handleMouseMove(e, project.id)}
+              onClick={() => {
+                sendGAEvent({
+                  event: 'project_click',
+                  value: project.name,
+                  project_name: project.name,
+                  project_url: project.link,
+                  event_category: 'engagement',
+                  event_label: 'recent_works_section',
+                });
+              }}
             >
               {/* Project Name */}
               <motion.h3
