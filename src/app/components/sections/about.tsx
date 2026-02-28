@@ -54,7 +54,7 @@ export default function About() {
         </h1>
         <div className="relative flex-shrink-0 cursor-pointer">
           <motion.div
-            className="relative h-[80px] w-[75px] overflow-hidden rounded-full border-4 border-white bg-gray-100 md:h-[240px] md:w-[220px]"
+            className="rotating-gradient-border relative h-[80px] w-[75px] overflow-hidden rounded-full border-4 border-white bg-gray-100 md:h-[240px] md:w-[220px]"
             whileHover={{
               rotate: [0, -10, 10, -10, 0],
               transition: { duration: 0.5 },
@@ -82,16 +82,18 @@ export default function About() {
 
       <div className="relative flex w-full flex-col items-start justify-between gap-10 text-[#2C3333] md:flex-row md:gap-0">
         <motion.p
-          className="font-family-inter text-[18px] leading-relaxed font-normal md:max-w-[508px] md:text-[18px]"
+          className="font-family-inter text-base leading-relaxed font-normal md:max-w-[508px] md:text-lg"
           initial="hidden"
           animate={isInView ? 'visible' : 'hidden'}
           variants={fadeInUp}
           transition={{ delay: 0.2 }}
         >
-          My name is Jeremiah, and I&apos;m a front-end developer who crafts
-          websites with a strong emphasis on seamless animations and engaging
-          user interactions. I&apos;m here to transform your ideas into reality,
-          delivering originality and excellence to the online world.
+          Hey, I&apos;m Jeremiah — I build websites and web apps that feel as
+          good as they look. For the past 4+ years, I&apos;ve been helping
+          startups and growing teams bring their ideas to life with React and
+          Next.js — fast-loading pages, smooth animations, and the kind of
+          details that make users stick around. I genuinely love what I do, and
+          I&apos;d love to help bring your next project to life too.
         </motion.p>
 
         <motion.div

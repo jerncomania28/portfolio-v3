@@ -4,21 +4,42 @@ import { useEffect, useState } from 'react';
 import { sendGAEvent } from '@next/third-parties/google';
 
 import { Calendar } from 'lucide-react';
-import { motion } from 'motion/react';
+import { motion, useMotionValue, useSpring } from 'motion/react';
 
 import { CalendlyModal } from '@/components/calendly-modal';
 
 import { BOOK_A_CALL } from '@/lib/constant';
+import { useReducedMotion } from '@/lib/hooks';
 
 import { ScrollButton } from '@/ui/scroll-button';
 
 export default function Hero() {
   const [isCalendlyOpen, setIsCalendlyOpen] = useState(false);
+  const prefersReducedMotion = useReducedMotion();
 
-  // Ensure page starts at top on load to prevent auto-scroll
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const springConfig = { damping: 30, stiffness: 100, mass: 0.5 };
+  const orbX = useSpring(mouseX, springConfig);
+  const orbY = useSpring(mouseY, springConfig);
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  useEffect(() => {
+    if (prefersReducedMotion) return;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      mouseX.set(e.clientX);
+      mouseY.set(e.clientY);
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, [mouseX, mouseY, prefersReducedMotion]);
+
   const text = 'Your website could work better—if I developed it.';
   const words = text.split(' ');
 
@@ -54,9 +75,24 @@ export default function Hero() {
   return (
     <section
       id="home"
-      className="relative flex min-h-screen w-full snap-start flex-col justify-between px-4 py-8 md:px-10 md:py-12"
+      className="grain-overlay relative flex min-h-screen w-full snap-start flex-col justify-between overflow-hidden px-4 py-8 md:px-10 md:py-12"
     >
-      <div className="relative flex w-full flex-1 items-center justify-center">
+      {/* Cursor-following gradient orb */}
+      {!prefersReducedMotion && (
+        <motion.div
+          className="pointer-events-none fixed z-0 h-[500px] w-[500px] rounded-full opacity-20 blur-[120px]"
+          style={{
+            left: orbX,
+            top: orbY,
+            x: '-50%',
+            y: '-50%',
+            background:
+              'radial-gradient(circle, #7BB6DD 0%, #a855f7 50%, transparent 70%)',
+          }}
+        />
+      )}
+
+      <div className="relative z-10 flex w-full flex-1 items-center justify-center">
         <motion.h1
           className="text-footer-background text-[75px] leading-[100%] font-bold tracking-tighter md:text-[110px] lg:text-[140px] xl:text-[170px] 2xl:text-[200px]"
           variants={container}
@@ -77,7 +113,7 @@ export default function Hero() {
       </div>
 
       <motion.div
-        className="relative flex w-full flex-col items-center justify-center gap-6 pb-6 md:flex-row md:items-end md:justify-between md:pb-8"
+        className="relative z-10 flex w-full flex-col items-center justify-center gap-6 pb-6 md:flex-row md:items-end md:justify-between md:pb-8"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 2, duration: 0.8 }}
@@ -95,8 +131,8 @@ export default function Hero() {
             setIsCalendlyOpen(true);
           }}
           className="bg-footer-background group relative overflow-hidden rounded-full px-10 py-5 text-white shadow-2xl transition-all duration-300 hover:shadow-[0_0_60px_rgba(123,182,221,0.4)] md:px-12 md:py-6"
-          whileHover={{ scale: 1.05, y: -4 }}
-          whileTap={{ scale: 0.95 }}
+          whileHover={prefersReducedMotion ? undefined : { scale: 1.05, y: -4 }}
+          whileTap={prefersReducedMotion ? undefined : { scale: 0.95 }}
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 2.5, duration: 0.8 }}
@@ -104,9 +140,13 @@ export default function Hero() {
           {/* Animated gradient background */}
           <motion.div
             className="absolute inset-0 bg-gradient-to-r from-[#7BB6DD] via-[#5BA4D1] to-[#7BB6DD]"
-            animate={{
-              backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
-            }}
+            animate={
+              prefersReducedMotion
+                ? undefined
+                : {
+                    backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
+                  }
+            }
             transition={{
               duration: 3,
               repeat: Infinity,
@@ -119,10 +159,14 @@ export default function Hero() {
 
           <span className="relative z-10 flex items-center gap-3 text-xl font-black tracking-wide uppercase md:text-2xl">
             <motion.div
-              animate={{
-                scale: [1, 1.2, 1],
-                rotate: [0, 5, -5, 0],
-              }}
+              animate={
+                prefersReducedMotion
+                  ? undefined
+                  : {
+                      scale: [1, 1.2, 1],
+                      rotate: [0, 5, -5, 0],
+                    }
+              }
               transition={{
                 duration: 2,
                 repeat: Infinity,
@@ -150,9 +194,13 @@ export default function Hero() {
         <div className="flex flex-col items-center gap-3 md:flex-row md:gap-5">
           <motion.span
             className="text-footer-background text-base leading-[100%] font-medium md:text-lg"
-            animate={{
-              opacity: [0.5, 1, 0.5],
-            }}
+            animate={
+              prefersReducedMotion
+                ? undefined
+                : {
+                    opacity: [0.5, 1, 0.5],
+                  }
+            }
             transition={{
               duration: 2,
               repeat: Infinity,
