@@ -92,7 +92,7 @@ export const metadata: Metadata = {
     'Portfolio Website',
     'Hire Frontend Developer',
   ],
-  authors: [{ name: 'Jeremiah Okon', url: 'https://jeremiahokon.pro' }],
+  authors: [{ name: 'Jeremiah Okon', url: 'https://jeremiahokon.online' }],
   creator: 'Jeremiah Okon',
   publisher: 'Jeremiah Okon',
   formatDetection: {
@@ -100,7 +100,7 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://jeremiahokon.pro'),
+  metadataBase: new URL('https://jeremiahokon.online'),
   alternates: {
     canonical: '/',
   },
@@ -108,18 +108,10 @@ export const metadata: Metadata = {
     title: 'Jeremiah Okon - Frontend Developer | React & Next.js Expert',
     description:
       'Experienced Frontend Developer specializing in React, Next.js, and TypeScript. Creating seamless animations and engaging user interactions for high-converting websites.',
-    url: 'https://jeremiahokon.pro',
+    url: 'https://jeremiahokon.online',
     siteName: 'Jeremiah Okon Portfolio',
     locale: 'en_US',
     type: 'website',
-    images: [
-      {
-        url: '/og-image.png',
-        width: 1200,
-        height: 630,
-        alt: 'Jeremiah Okon - Frontend Developer',
-      },
-    ],
   },
   twitter: {
     card: 'summary_large_image',
@@ -127,7 +119,6 @@ export const metadata: Metadata = {
     description:
       'Experienced Frontend Developer specializing in React, Next.js, and TypeScript. Creating seamless animations and engaging user interactions.',
     creator: '@okonjeremiah4',
-    images: ['/twitter-card.png'],
   },
   icons: {
     icon: [
