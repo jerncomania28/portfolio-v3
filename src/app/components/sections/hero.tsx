@@ -75,7 +75,7 @@ export default function Hero() {
   return (
     <section
       id="home"
-      className="grain-overlay relative flex min-h-screen w-full snap-start flex-col justify-between overflow-hidden px-4 py-8 md:px-10 md:py-12"
+      className="grain-overlay relative flex min-h-screen w-full snap-start flex-col justify-between overflow-hidden px-4 py-8 md:min-h-[calc(100dvh-6rem)] md:px-10 md:py-12"
     >
       {/* Cursor-following gradient orb */}
       {!prefersReducedMotion && (
@@ -223,7 +223,7 @@ export default function Hero() {
         </div>
 
         {/* Scroll indicator - Right side */}
-        <div className="flex flex-col items-center gap-3 md:flex-row md:gap-5">
+        <div className="hidden flex-col items-center gap-3 md:flex md:flex-row md:gap-5">
           <motion.span
             className="text-footer-background text-base leading-[100%] font-medium md:text-lg"
             animate={

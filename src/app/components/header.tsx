@@ -15,6 +15,7 @@ import {
   BreadcrumbSeparator,
 } from '@/ui/breadcrumb';
 import { Button } from '@/ui/button';
+import { NigeriaClock } from '@/ui/nigeria-clock';
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -58,9 +59,7 @@ export default function Header() {
           />
         </motion.a>
         <div className="flex flex-col items-center justify-center gap-3">
-          <span className="text-xl leading-[100%] font-normal -tracking-[2%] text-[#666666B2]">
-            Ilorin, Nigeria ❤️
-          </span>
+          <NigeriaClock />
           <Link
             href="mailto:okonjeremiahprogs@gmail.com"
             target="_blank"
