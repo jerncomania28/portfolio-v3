@@ -1,4 +1,4 @@
-import { Playfair_Display } from 'next/font/google';
+import { Instrument_Serif, Playfair_Display } from 'next/font/google';
 import localFont from 'next/font/local';
 import { GoogleAnalytics } from '@next/third-parties/google';
 
@@ -62,6 +62,14 @@ const playfairDisplay = Playfair_Display({
   subsets: ['latin'],
   weight: ['700', '900'],
   variable: '--font-playfair-display',
+  display: 'swap',
+});
+
+const instrumentSerif = Instrument_Serif({
+  subsets: ['latin'],
+  weight: '400',
+  style: ['normal', 'italic'],
+  variable: '--font-instrument-serif',
   display: 'swap',
 });
 
@@ -169,7 +177,7 @@ export default function RootLayout({
         <StructuredData />
       </head>
       <body
-        className={`${neueMontreal.variable} ${alegreyaSans.variable} ${inter.variable} ${playfairDisplay.variable} snap-y snap-mandatory overflow-x-hidden antialiased`}
+        className={`${neueMontreal.variable} ${alegreyaSans.variable} ${inter.variable} ${playfairDisplay.variable} ${instrumentSerif.variable} snap-y snap-mandatory overflow-x-hidden antialiased`}
       >
         <Header />
         <main>{children}</main>

@@ -1,75 +1,71 @@
 'use client';
 
 import {
+  ArrowUpRight,
+  Boxes,
   Code2,
-  Globe,
-  Layers,
+  Gauge,
   LayoutDashboard,
-  MonitorSmartphone,
-  Rocket,
+  Plug,
   ShoppingCart,
-  Zap,
 } from 'lucide-react';
 import { motion } from 'motion/react';
 
 import { useReducedMotion } from '@/lib/hooks';
 
-const services = [
+interface Service {
+  icon: typeof Code2;
+  name: string;
+  description: string;
+  highlight?: string;
+  span: string;
+  feature?: boolean;
+}
+
+const services: Service[] = [
   {
     icon: Code2,
-    name: 'React & Next.js Development',
+    name: 'React & Next.js Engineering',
     description:
-      'High-performance web applications built with React and Next.js for speed, SEO, and scalability.',
-    span: 'md:col-span-3',
-  },
-  {
-    icon: ShoppingCart,
-    name: 'E-commerce Solutions',
-    description:
-      'Custom online stores with seamless checkout, payment integration, and inventory management.',
-    span: 'md:col-span-3',
-  },
-  {
-    icon: Rocket,
-    name: 'SaaS Interfaces',
-    description:
-      'Intuitive dashboards and user interfaces for software-as-a-service products that convert.',
-    span: 'md:col-span-2',
-  },
-  {
-    icon: MonitorSmartphone,
-    name: 'Responsive Design',
-    description:
-      'Pixel-perfect layouts that look incredible on every device, from mobile to ultrawide.',
-    span: 'md:col-span-2',
-  },
-  {
-    icon: Zap,
-    name: 'Performance Optimization',
-    description:
-      'Speed up your existing site with Core Web Vitals tuning and bundle optimization.',
-    span: 'md:col-span-2',
+      'Production web apps architected for speed, SEO, and scale — server components, clean state, and code that the next dev actually enjoys reading.',
+    highlight: 'My core craft',
+    span: 'md:col-span-4',
+    feature: true,
   },
   {
     icon: LayoutDashboard,
-    name: 'Landing Pages',
+    name: 'SaaS Dashboards & Data Viz',
     description:
-      'High-converting landing pages with motion design that captures attention and drives action.',
+      'Complex, data-dense dashboards made intuitive — real-time updates, charts, and flows that turn raw data into decisions.',
     span: 'md:col-span-2',
   },
   {
-    icon: Layers,
-    name: 'Component Libraries',
+    icon: Gauge,
+    name: 'Performance & Core Web Vitals',
     description:
-      'Reusable, accessible UI component systems built with design tokens and documentation.',
+      'Slow site? I tune bundles, rendering, and Web Vitals until it feels instant.',
     span: 'md:col-span-2',
   },
   {
-    icon: Globe,
-    name: 'API Integration',
+    icon: Boxes,
+    name: 'Design Systems & Components',
     description:
-      'Connecting your frontend to any backend, third-party service, or headless CMS.',
+      'Reusable, accessible component libraries built on design tokens and documented for the whole team.',
     span: 'md:col-span-2',
+  },
+  {
+    icon: ShoppingCart,
+    name: 'E-commerce & Payments',
+    description:
+      'Storefronts with seamless checkout and payment integration that convert browsers into buyers.',
+    span: 'md:col-span-2',
+  },
+  {
+    icon: Plug,
+    name: 'API & Backend Integration',
+    description:
+      'Wiring your frontend to any REST/GraphQL API, third-party service, or headless CMS — typed, resilient, and fast.',
+    span: 'md:col-span-6',
   },
 ];
 
@@ -107,13 +103,17 @@ export default function Services() {
           [ SERVICES ]
         </span>
         <h2 className="text-footer-background max-w-3xl text-3xl leading-tight font-bold tracking-tight md:text-5xl lg:text-6xl">
-          Whatever stage you&apos;re at — I&apos;ve built it.
+          Whatever stage you&apos;re at — I&apos;ve{' '}
+          <span className="font-family-instrument font-normal italic">
+            built
+          </span>{' '}
+          it.
         </h2>
       </div>
 
       {/* Bento Grid */}
       <motion.div
-        className="mx-auto grid max-w-6xl grid-cols-1 gap-4 md:grid-cols-6 md:gap-5"
+        className="mx-auto grid max-w-6xl auto-rows-fr grid-cols-1 gap-4 md:grid-cols-6 md:gap-5"
         variants={prefersReducedMotion ? undefined : containerVariants}
         initial="hidden"
         whileInView="visible"
@@ -125,23 +125,48 @@ export default function Services() {
           return (
             <motion.div
               key={service.name}
-              className={`group relative overflow-hidden rounded-2xl border border-[#2C3333]/8 bg-[#2C3333]/[0.03] p-6 backdrop-blur-sm transition-all duration-500 hover:border-[#7BB6DD]/30 hover:bg-[#2C3333]/[0.06] md:p-8 ${service.span}`}
+              className={`group relative flex flex-col overflow-hidden rounded-2xl border border-[#2C3333]/10 bg-[#2C3333]/[0.03] p-6 backdrop-blur-sm transition-colors duration-500 hover:border-[#7BB6DD]/40 hover:bg-[#2C3333]/[0.06] md:p-8 ${service.span}`}
               variants={prefersReducedMotion ? undefined : itemVariants}
+              whileHover={prefersReducedMotion ? undefined : { y: -4 }}
+              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
             >
-              {/* Hover glow */}
-              <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#7BB6DD]/0 to-[#5BA4D1]/0 opacity-0 transition-opacity duration-500 group-hover:opacity-10" />
+              {/* Hover glow sweep */}
+              <div className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br from-[#7BB6DD]/0 via-[#7BB6DD]/0 to-[#5BA4D1]/0 opacity-0 transition-opacity duration-500 group-hover:from-[#7BB6DD]/[0.08] group-hover:to-[#5BA4D1]/[0.04] group-hover:opacity-100" />
 
-              <div className="relative z-10 flex flex-col gap-4">
-                <div>
-                  <Icon
-                    className="h-6 w-6 text-[#2C3333]/60 transition-colors duration-300 group-hover:text-[#7BB6DD]"
-                    strokeWidth={1.5}
-                  />
+              {/* Corner arrow on hover */}
+              <ArrowUpRight
+                className="absolute top-5 right-5 h-5 w-5 translate-x-1 -translate-y-1 text-[#7BB6DD] opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:translate-y-0 group-hover:opacity-100 md:top-7 md:right-7"
+                strokeWidth={1.5}
+              />
+
+              <div className="relative z-10 flex h-full flex-col gap-4">
+                <div className="flex items-center gap-3">
+                  <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#2C3333]/[0.05] transition-colors duration-300 group-hover:bg-[#7BB6DD]/15">
+                    <Icon
+                      className="h-5 w-5 text-[#2C3333]/70 transition-colors duration-300 group-hover:text-[#5BA4D1]"
+                      strokeWidth={1.5}
+                    />
+                  </span>
+                  {service.highlight && (
+                    <span className="font-family-inter rounded-full bg-[#7BB6DD]/15 px-3 py-1 text-[10px] font-medium tracking-[0.15em] text-[#5BA4D1] uppercase">
+                      {service.highlight}
+                    </span>
+                  )}
                 </div>
-                <h3 className="text-footer-background text-lg font-bold md:text-xl">
+                <h3
+                  className={`text-footer-background font-bold ${
+                    service.feature
+                      ? 'text-2xl md:text-3xl'
+                      : 'text-lg md:text-xl'
+                  }`}
+                >
                   {service.name}
                 </h3>
-                <p className="font-family-inter text-sm leading-relaxed text-[#2C3333]/60 md:text-base">
+                <p
+                  className={`font-family-inter leading-relaxed text-[#2C3333]/80 ${
+                    service.feature ? 'text-base md:text-lg' : 'text-sm'
+                  }`}
+                >
                   {service.description}
                 </p>
               </div>

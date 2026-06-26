@@ -1,10 +1,10 @@
 @import 'tailwindcss';
-@import "tw-animate-css";
+@import 'tw-animate-css';
 
 :root {
-  --footer-background: #2C3333;
+  --footer-background: #2c3333;
   --radius: 0.625rem;
-  --background: #D9D9D9;
+  --background: #d9d9d9;
   --foreground: oklch(0.13 0.028 261.692);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.13 0.028 261.692);
@@ -78,12 +78,22 @@
   --font-family-alegreya: var(--font-alegreya-sans);
   --font-family-inter: var(--font-inter);
   --font-family-playfair: var(--font-playfair-display);
+  --font-family-instrument: var(--font-instrument-serif);
 }
 
 @custom-variant dark (&:where(.dark, .dark *));
 
 body {
   font-family: var(--font-neue-montreal);
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
 .dark {
@@ -131,13 +141,21 @@ body {
 
 /* Marquee animations */
 @keyframes marquee-left {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-33.33%); }
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-33.33%);
+  }
 }
 
 @keyframes marquee-right {
-  0% { transform: translateX(-33.33%); }
-  100% { transform: translateX(0); }
+  0% {
+    transform: translateX(-33.33%);
+  }
+  100% {
+    transform: translateX(0);
+  }
 }
 
 .animate-marquee-left {
@@ -150,12 +168,16 @@ body {
 
 /* Rotating gradient border */
 @keyframes rotate-gradient {
-  0% { --gradient-angle: 0deg; }
-  100% { --gradient-angle: 360deg; }
+  0% {
+    --gradient-angle: 0deg;
+  }
+  100% {
+    --gradient-angle: 360deg;
+  }
 }
 
 @property --gradient-angle {
-  syntax: "<angle>";
+  syntax: '<angle>';
   initial-value: 0deg;
   inherits: false;
 }
@@ -172,10 +194,10 @@ body {
   border-radius: 50%;
   background: conic-gradient(
     from var(--gradient-angle),
-    #7BB6DD,
-    #5BA4D1,
+    #7bb6dd,
+    #5ba4d1,
     #a855f7,
-    #7BB6DD
+    #7bb6dd
   );
   animation: rotate-gradient 4s linear infinite;
   opacity: 0.6;
@@ -184,10 +206,19 @@ body {
 
 /* Gradient mesh animation */
 @keyframes gradient-mesh {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  25% { transform: translate(30px, -50px) scale(1.1); }
-  50% { transform: translate(-20px, 20px) scale(0.9); }
-  75% { transform: translate(50px, 30px) scale(1.05); }
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  25% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+  50% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+  75% {
+    transform: translate(50px, 30px) scale(1.05);
+  }
 }
 
 .animate-gradient-mesh-1 {
@@ -204,8 +235,13 @@ body {
 
 /* Gradient text animation */
 @keyframes gradient-text-shift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
 .animate-gradient-text {
@@ -230,8 +266,12 @@ body {
 
 /* Testimonials auto-scroll */
 @keyframes testimonial-scroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
 .animate-testimonial-scroll {

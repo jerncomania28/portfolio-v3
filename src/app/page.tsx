@@ -1,5 +1,6 @@
 import About from './components/sections/about';
 import Contact from './components/sections/contact';
+import ContentCreation from './components/sections/content-creation';
 import Hero from './components/sections/hero';
 import RecentWorks from './components/sections/recent-works';
 import Services from './components/sections/services';
@@ -19,6 +20,7 @@ export default function Home() {
       <RecentWorks />
       <Stats />
       {/* <Testimonials /> */}
+      <ContentCreation />
       <Contact />
     </div>
   );

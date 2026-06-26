@@ -95,9 +95,20 @@ export default function StructuredData() {
       itemListElement: [
         {
           '@type': 'CreativeWork',
-          name: 'Hypetag',
-          url: 'https://hypetag.com/',
-          description: 'Frontend development project',
+          name: 'Dokita',
+          url: 'https://dokita-website.vercel.app/',
+          description: 'Telemedicine web platform built with React & Next.js',
+          author: {
+            '@type': 'Person',
+            name: 'Jeremiah Okon',
+          },
+        },
+        {
+          '@type': 'CreativeWork',
+          name: 'DriPA',
+          url: 'https://dripa.ng/',
+          description:
+            'Driver performance and assurance admin platform built with React & Next.js',
           author: {
             '@type': 'Person',
             name: 'Jeremiah Okon',

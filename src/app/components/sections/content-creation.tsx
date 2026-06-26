@@ -1,0 +1,196 @@
+'use client';
+
+import { useState } from 'react';
+import { sendGAEvent } from '@next/third-parties/google';
+
+import { Play } from 'lucide-react';
+import { motion } from 'motion/react';
+
+import { useReducedMotion } from '@/lib/hooks';
+
+interface ShortVideo {
+  id: string;
+  title: string;
+}
+
+// Vertical YouTube Shorts — embedded inline via a click-to-load facade.
+const videos: ShortVideo[] = [
+  { id: 'he-uobSPSzY', title: 'On the dev grind' },
+  { id: '2xFkMccBZo0', title: 'Building in public' },
+  { id: 'UTmr9NrpPUk', title: 'Frontend tips' },
+  { id: 'QWuZ9gC0B94', title: 'Behind the build' },
+  { id: 'CuOJ4VC9RkY', title: 'Dev life' },
+];
+
+const YOUTUBE_CHANNEL =
+  'https://www.youtube.com/channel/UCcmp0d3tTWEbIJkMNVvG9pw';
+const TIKTOK_PROFILE = 'https://www.tiktok.com/@jay_state.mind';
+
+function VideoCard({ video }: { video: ShortVideo }) {
+  const [active, setActive] = useState(false);
+  const prefersReducedMotion = useReducedMotion();
+
+  return (
+    <motion.div
+      className="flex w-full justify-center"
+      variants={
+        prefersReducedMotion
+          ? undefined
+          : {
+              hidden: { opacity: 0, y: 30 },
+              visible: {
+                opacity: 1,
+                y: 0,
+                transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+              },
+            }
+      }
+    >
+      {/* Phone frame */}
+      <div className="relative aspect-[9/16] w-full max-w-[360px] overflow-hidden rounded-[2.5rem] border-[8px] border-[#2C3333] bg-[#2C3333] shadow-2xl transition-transform duration-300 hover:scale-[1.02]">
+        {/* Notch */}
+        <div className="absolute top-2.5 left-1/2 z-20 h-2 w-20 -translate-x-1/2 rounded-full bg-white/20" />
+
+        {active ? (
+          <iframe
+            src={`https://www.youtube-nocookie.com/embed/${video.id}?autoplay=1&rel=0&playsinline=1`}
+            title={video.title}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            loading="lazy"
+            className="absolute inset-0 h-full w-full rounded-[1.8rem]"
+          />
+        ) : (
+          <button
+            type="button"
+            onClick={() => {
+              setActive(true);
+              sendGAEvent({
+                event: 'short_play',
+                value: video.id,
+                video_title: video.title,
+                event_category: 'engagement',
+                event_label: 'content_creation_section',
+              });
+            }}
+            className="group absolute inset-0 h-full w-full overflow-hidden rounded-[1.8rem]"
+            aria-label={`Play ${video.title}`}
+          >
+            {/* Poster (plain img to avoid external-domain config) */}
+            <img
+              src={`https://i.ytimg.com/vi/${video.id}/hqdefault.jpg`}
+              alt={video.title}
+              loading="lazy"
+              className="absolute inset-0 h-full w-full scale-150 object-cover transition-transform duration-500 group-hover:scale-[1.6]"
+            />
+            {/* Gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20" />
+
+            {/* Play button */}
+            <span className="absolute top-1/2 left-1/2 flex h-20 w-20 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 shadow-lg backdrop-blur transition-transform duration-300 group-hover:scale-110">
+              <Play className="ml-1 h-8 w-8 fill-[#2C3333] text-[#2C3333]" />
+            </span>
+
+            {/* Title */}
+            <span className="font-family-inter absolute right-4 bottom-4 left-4 text-left text-base font-medium text-white">
+              {video.title}
+            </span>
+          </button>
+        )}
+      </div>
+    </motion.div>
+  );
+}
+
+export default function ContentCreation() {
+  const prefersReducedMotion = useReducedMotion();
+
+  return (
+    <section className="relative flex w-full snap-start flex-col items-center gap-10 px-4 py-20 md:gap-14 md:px-10 md:py-32">
+      {/* Eyebrow + Heading */}
+      <div className="flex flex-col items-center gap-4 text-center">
+        <span className="font-family-inter text-xs font-medium tracking-[0.3em] text-[#2C3333]/50 uppercase">
+          [ ON THE SIDE ]
+        </span>
+        <h2 className="text-footer-background max-w-3xl text-3xl leading-tight font-bold tracking-tight md:text-5xl lg:text-6xl">
+          I create{' '}
+          <span className="font-family-instrument font-normal italic">
+            content
+          </span>{' '}
+          off the clock, too.
+        </h2>
+        <p className="font-family-inter max-w-xl text-base text-[#2C3333]/70 md:text-lg">
+          When I&apos;m not shipping code, I&apos;m sharing the journey — dev
+          life, tips, and building in public on YouTube and TikTok.
+        </p>
+      </div>
+
+      {/* Grid */}
+      <motion.div
+        className="grid w-full max-w-6xl grid-cols-1 justify-items-center gap-6 sm:grid-cols-2 md:gap-8 lg:grid-cols-3"
+        variants={
+          prefersReducedMotion
+            ? undefined
+            : {
+                hidden: { opacity: 0 },
+                visible: {
+                  opacity: 1,
+                  transition: { staggerChildren: 0.08, delayChildren: 0.1 },
+                },
+              }
+        }
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.1 }}
+      >
+        {videos.map((video) => (
+          <VideoCard key={video.id} video={video} />
+        ))}
+      </motion.div>
+
+      {/* Platform links */}
+      <div className="flex flex-col items-center gap-4 sm:flex-row">
+        <a
+          href={YOUTUBE_CHANNEL}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() => {
+            sendGAEvent({
+              event: 'social_click',
+              value: 'YouTube',
+              social_platform: 'YouTube',
+              social_url: YOUTUBE_CHANNEL,
+              event_category: 'engagement',
+              event_label: 'content_creation_section',
+            });
+          }}
+          className="group flex items-center gap-2 rounded-full border border-[#2C3333]/15 px-6 py-3 transition-colors duration-300 hover:border-[#7BB6DD]/50 hover:bg-[#2C3333]/[0.04]"
+        >
+          <span className="font-family-inter text-sm font-medium tracking-wide text-[#2C3333] uppercase">
+            Subscribe on YouTube
+          </span>
+        </a>
+        <a
+          href={TIKTOK_PROFILE}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() => {
+            sendGAEvent({
+              event: 'social_click',
+              value: 'TikTok',
+              social_platform: 'TikTok',
+              social_url: TIKTOK_PROFILE,
+              event_category: 'engagement',
+              event_label: 'content_creation_section',
+            });
+          }}
+          className="group flex items-center gap-2 rounded-full border border-[#2C3333]/15 px-6 py-3 transition-colors duration-300 hover:border-[#7BB6DD]/50 hover:bg-[#2C3333]/[0.04]"
+        >
+          <span className="font-family-inter text-sm font-medium tracking-wide text-[#2C3333] uppercase">
+            Follow on TikTok
+          </span>
+        </a>
+      </div>
+    </section>
+  );
+}

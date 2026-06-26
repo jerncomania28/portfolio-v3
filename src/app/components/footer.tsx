@@ -59,6 +59,11 @@ export default function Footer() {
   const socialLinks = [
     { name: 'Linkedin', url: 'https://www.linkedin.com/in/okon-jeremiah/' },
     { name: 'Github', url: 'https://github.com/jerncomania28' },
+    {
+      name: 'Youtube',
+      url: 'https://www.youtube.com/channel/UCcmp0d3tTWEbIJkMNVvG9pw',
+    },
+    { name: 'Tiktok', url: 'https://www.tiktok.com/@jay_state.mind' },
   ];
 
   return (
@@ -74,7 +79,8 @@ export default function Footer() {
           initial="hidden"
           animate={isInView ? 'visible' : 'hidden'}
         >
-          Let&apos;s Create Magic!
+          Let&apos;s Create{' '}
+          <span className="font-family-instrument italic">Magic!</span>
         </motion.span>
 
         {/* CTA Button */}
@@ -259,7 +265,7 @@ export default function Footer() {
         animate={isInView ? 'visible' : 'hidden'}
         transition={{ delay: 0.6 }}
       >
-        All rights reserved &copy; 2025 • Jeremiah Okon
+        All rights reserved &copy; {new Date().getFullYear()} • Jeremiah Okon
       </motion.span>
 
       <CalendlyModal

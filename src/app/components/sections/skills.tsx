@@ -133,7 +133,11 @@ export default function Skills() {
           [ STACK ]
         </span>
         <h2 className="text-footer-background max-w-2xl text-3xl leading-tight font-bold tracking-tight md:text-5xl lg:text-6xl">
-          Tools I use to build things that perform.
+          Tools I use to build things that{' '}
+          <span className="font-family-instrument font-normal italic">
+            perform
+          </span>
+          .
         </h2>
       </div>
 

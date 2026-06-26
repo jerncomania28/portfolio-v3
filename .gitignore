@@ -44,3 +44,6 @@ next-env.d.ts
 .claude
 scripts/
 
+
+# playwright mcp
+.playwright-mcp/

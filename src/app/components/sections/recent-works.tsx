@@ -15,16 +15,27 @@ interface Project {
   image: string;
   link?: string;
   description: string;
+  tag?: string;
 }
 
 const projects: Project[] = [
   {
     id: 1,
-    name: 'Hypetag',
-    image: '/assets/webp/hypetag.webp',
-    link: 'https://hypetag.com/',
+    name: 'Dokita',
+    image: '/assets/webp/dokita.webp',
+    link: 'https://dokita-website.vercel.app/',
+    tag: 'Telemedicine · Web Platform',
     description:
-      'A social commerce platform connecting creators and brands with seamless tag-based product discovery.',
+      'A full-fledged telemedicine platform — online consultations, e-prescriptions, and pharmacy access, with a clinical admin dashboard. Built with React & Next.js.',
+  },
+  {
+    id: 7,
+    name: 'DriPA',
+    image: '/assets/webp/dripa.webp',
+    link: 'https://dripa.ng/',
+    tag: 'Driver Performance · Admin Platform',
+    description:
+      'A driver performance and assurance platform — fleet analytics, driver scoring, and an operations admin dashboard built with React & Next.js.',
   },
   {
     id: 2,
@@ -93,6 +104,7 @@ function ProjectRow({ project, index }: { project: Project; index: number }) {
       <Link
         href={project.link as string}
         target="_blank"
+        rel="noopener noreferrer"
         className="relative flex w-full items-center justify-between px-4 py-6 md:px-10 md:py-8"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
@@ -126,10 +138,15 @@ function ProjectRow({ project, index }: { project: Project; index: number }) {
             {formattedIndex}
           </span>
           <div className="flex flex-col gap-1">
+            {project.tag && (
+              <span className="font-family-inter text-[10px] font-medium tracking-[0.18em] text-[#5BA4D1] uppercase md:text-xs">
+                {project.tag}
+              </span>
+            )}
             <h3 className="text-footer-background text-2xl font-bold tracking-tight transition-colors duration-300 md:text-4xl lg:text-5xl">
               {project.name}
             </h3>
-            <p className="font-family-inter hidden text-sm leading-relaxed text-[#2C3333]/50 md:block md:text-base">
+            <p className="font-family-inter hidden text-sm leading-relaxed text-[#2C3333]/70 md:block md:text-base">
               {project.description}
             </p>
           </div>
@@ -203,7 +220,7 @@ function ProjectRow({ project, index }: { project: Project; index: number }) {
               sizes="100vw"
             />
           </div>
-          <p className="font-family-inter text-sm leading-relaxed text-[#2C3333]/60">
+          <p className="font-family-inter text-sm leading-relaxed text-[#2C3333]/70">
             {project.description}
           </p>
         </div>

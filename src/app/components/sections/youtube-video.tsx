@@ -15,7 +15,11 @@ export default function YouTubeVideo() {
           [ MEET JEREMIAH ]
         </span>
         <h2 className="text-footer-background max-w-3xl text-3xl leading-tight font-bold tracking-tight md:text-5xl lg:text-6xl">
-          See how I work before you hire me.
+          See how I{' '}
+          <span className="font-family-instrument font-normal italic">
+            work
+          </span>{' '}
+          before you hire me.
         </h2>
       </div>
 

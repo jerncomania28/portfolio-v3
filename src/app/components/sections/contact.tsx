@@ -48,7 +48,11 @@ export default function Contact() {
         transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
         viewport={{ once: true }}
       >
-        Got a project in mind?
+        Got a{' '}
+        <span className="font-family-instrument font-normal italic">
+          project
+        </span>{' '}
+        in mind?
       </motion.h2>
 
       {/* Subline */}
