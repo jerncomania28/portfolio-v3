@@ -43,6 +43,7 @@ next-env.d.ts
 # Claude Code
 .claude
 scripts/
+!scripts/sync-shorts.mjs
 
 
 # playwright mcp
