@@ -1,11 +1,8 @@
-'use client';
-
-import { sendGAEvent } from '@next/third-parties/google';
-
 import { Star } from 'lucide-react';
 
 import { UPWORK_PROFILE_URL } from '@/lib/constant';
-import { useReducedMotion } from '@/lib/hooks';
+
+import { TrackedLink } from '@/ui/tracked-link';
 
 interface Testimonial {
   quote: string;
@@ -123,7 +120,6 @@ function TestimonialCard({
 }
 
 export default function Testimonials() {
-  const prefersReducedMotion = useReducedMotion();
   const doubled = [...testimonials, ...testimonials];
 
   return (
@@ -140,44 +136,31 @@ export default function Testimonials() {
           What clients say.
         </h2>
         {UPWORK_PROFILE_URL && (
-          <a
+          <TrackedLink
             href={UPWORK_PROFILE_URL}
-            target="_blank"
-            rel="noopener noreferrer"
             className="font-family-inter text-sm text-[#2C3333]/60 underline underline-offset-4 transition-colors hover:text-[#2C3333]"
-            onClick={() => {
-              sendGAEvent({
-                event: 'social_click',
-                value: 'Upwork',
-                social_platform: 'Upwork',
-                social_url: UPWORK_PROFILE_URL,
-                event_category: 'engagement',
-                event_label: 'testimonials_section',
-              });
+            gaEvent={{
+              event: 'social_click',
+              value: 'Upwork',
+              social_platform: 'Upwork',
+              social_url: UPWORK_PROFILE_URL,
+              event_category: 'engagement',
+              event_label: 'testimonials_section',
             }}
           >
             All reviews from Upwork ↗
-          </a>
+          </TrackedLink>
         )}
       </div>
 
       {/* Scrolling Cards */}
-      <div
-        className={`group flex gap-5 ${
-          prefersReducedMotion
-            ? 'flex-wrap justify-center px-4'
-            : 'animate-testimonial-scroll hover:[animation-play-state:paused]'
-        }`}
-        style={prefersReducedMotion ? undefined : { width: 'max-content' }}
-      >
-        {(prefersReducedMotion ? testimonials : doubled).map(
-          (testimonial, i) => (
-            <TestimonialCard
-              key={`${testimonial.project}-${i}`}
-              {...testimonial}
-            />
-          )
-        )}
+      <div className="group animate-testimonial-scroll flex w-max gap-5 hover:[animation-play-state:paused] motion-reduce:w-auto motion-reduce:animate-none motion-reduce:flex-wrap motion-reduce:justify-center motion-reduce:px-4">
+        {doubled.map((testimonial, i) => (
+          <TestimonialCard
+            key={`${testimonial.project}-${i}`}
+            {...testimonial}
+          />
+        ))}
       </div>
     </section>
   );

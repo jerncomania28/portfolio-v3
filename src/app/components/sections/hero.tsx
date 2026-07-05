@@ -43,35 +43,6 @@ export default function Hero() {
   const text = 'Your website could work better—if I developed it.';
   const words = text.split(' ');
 
-  const container = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.08,
-        delayChildren: 0.3,
-      },
-    },
-  };
-
-  const child = {
-    hidden: {
-      opacity: 0,
-      y: 60,
-      rotateX: 90,
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-      rotateX: 0,
-      transition: {
-        type: 'spring' as const,
-        damping: 12,
-        stiffness: 100,
-      },
-    },
-  };
-
   return (
     <section
       id="home"
@@ -93,31 +64,19 @@ export default function Hero() {
       )}
 
       <div className="relative z-10 flex w-full flex-1 flex-col items-center justify-center gap-6 md:gap-8">
-        <motion.p
-          className="font-family-inter text-center text-xs font-medium tracking-[0.3em] text-[#2C3333]/60 uppercase md:text-sm"
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
+        <p className="font-family-inter text-center text-xs font-medium tracking-[0.3em] text-[#2C3333]/60 uppercase md:text-sm">
           Jeremiah Okon — Frontend Developer · React &amp; Next.js Expert
-        </motion.p>
-        <motion.h1
-          className="text-footer-background text-[clamp(4.5rem,12vw,12.5rem)] leading-[100%] font-bold tracking-tighter"
-          variants={container}
-          initial="hidden"
-          animate="visible"
-        >
+        </p>
+        <h1 className="text-footer-background text-[clamp(4.5rem,12vw,12.5rem)] leading-[100%] font-bold tracking-tighter">
           {words.map((word, index) => (
-            <motion.span
+            <span
               key={index}
               className="mr-2 inline-block sm:mr-3 md:mr-4 lg:mr-5"
-              variants={child}
-              style={{ perspective: '1000px' }}
             >
               {word}
-            </motion.span>
+            </span>
           ))}
-        </motion.h1>
+        </h1>
       </div>
 
       <motion.div

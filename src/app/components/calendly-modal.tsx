@@ -69,6 +69,26 @@ export const CalendlyModal = ({
       }
     };
 
+    const loadCalendlyScript = () => {
+      const existing = document.getElementById('calendly-widget-script');
+      if (existing) {
+        initializeCalendly();
+
+        return;
+      }
+
+      const script = document.createElement('script');
+      script.id = 'calendly-widget-script';
+      script.src = 'https://assets.calendly.com/assets/external/widget.js';
+      script.async = true;
+      script.onload = initializeCalendly;
+      script.onerror = () => {
+        setError('Failed to load Calendly widget');
+        setIsLoading(false);
+      };
+      document.body.appendChild(script);
+    };
+
     if (isOpen) {
       // Track modal open event
       sendGAEvent({
@@ -81,7 +101,7 @@ export const CalendlyModal = ({
 
       setIsLoading(true);
       setError(null);
-      initializeCalendly();
+      loadCalendlyScript();
     }
 
     return () => {

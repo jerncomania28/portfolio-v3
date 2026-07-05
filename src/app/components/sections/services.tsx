@@ -1,5 +1,3 @@
-'use client';
-
 import {
   ArrowUpRight,
   Boxes,
@@ -9,9 +7,6 @@ import {
   Plug,
   ShoppingCart,
 } from 'lucide-react';
-import { motion } from 'motion/react';
-
-import { useReducedMotion } from '@/lib/hooks';
 
 interface Service {
   icon: typeof Code2;
@@ -70,31 +65,6 @@ const services: Service[] = [
 ];
 
 export default function Services() {
-  const prefersReducedMotion = useReducedMotion();
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.06,
-        delayChildren: 0.2,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: [0.22, 1, 0.36, 1] as const,
-      },
-    },
-  };
-
   return (
     <section
       id="services"
@@ -115,23 +85,14 @@ export default function Services() {
       </div>
 
       {/* Bento Grid */}
-      <motion.div
-        className="mx-auto grid max-w-6xl auto-rows-fr grid-cols-1 gap-4 md:grid-cols-6 md:gap-5"
-        variants={prefersReducedMotion ? undefined : containerVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.1 }}
-      >
+      <div className="mx-auto grid max-w-6xl auto-rows-fr grid-cols-1 gap-4 md:grid-cols-6 md:gap-5">
         {services.map((service) => {
           const Icon = service.icon;
 
           return (
-            <motion.div
+            <div
               key={service.name}
-              className={`group relative flex flex-col overflow-hidden rounded-2xl border border-[#2C3333]/10 bg-[#2C3333]/[0.03] p-6 backdrop-blur-sm transition-colors duration-500 hover:border-[#7BB6DD]/40 hover:bg-[#2C3333]/[0.06] md:p-8 ${service.span}`}
-              variants={prefersReducedMotion ? undefined : itemVariants}
-              whileHover={prefersReducedMotion ? undefined : { y: -4 }}
-              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              className={`group relative flex flex-col overflow-hidden rounded-2xl border border-[#2C3333]/10 bg-[#2C3333]/[0.03] p-6 backdrop-blur-sm transition-all duration-500 hover:-translate-y-1 hover:border-[#7BB6DD]/40 hover:bg-[#2C3333]/[0.06] md:p-8 ${service.span}`}
             >
               {/* Hover glow sweep */}
               <div className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br from-[#7BB6DD]/0 via-[#7BB6DD]/0 to-[#5BA4D1]/0 opacity-0 transition-opacity duration-500 group-hover:from-[#7BB6DD]/[0.08] group-hover:to-[#5BA4D1]/[0.04] group-hover:opacity-100" />
@@ -173,10 +134,10 @@ export default function Services() {
                   {service.description}
                 </p>
               </div>
-            </motion.div>
+            </div>
           );
         })}
-      </motion.div>
+      </div>
     </section>
   );
 }

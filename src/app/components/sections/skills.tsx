@@ -1,9 +1,3 @@
-'use client';
-
-import { motion } from 'motion/react';
-
-import { useReducedMotion } from '@/lib/hooks';
-
 interface Skill {
   name: string;
   icon: string;
@@ -89,38 +83,26 @@ function SkillPill({ skill }: { skill: Skill }) {
 function MarqueeRow({
   skills,
   direction,
-  index,
 }: {
   skills: Skill[];
   direction: 'left' | 'right';
-  index: number;
 }) {
-  const prefersReducedMotion = useReducedMotion();
   const tripled = [...skills, ...skills, ...skills];
 
   return (
-    <motion.div
-      className="relative overflow-hidden"
-      initial={prefersReducedMotion ? undefined : { opacity: 0, y: 20 }}
-      whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
-      viewport={{ once: true, amount: 0.3 }}
-    >
+    <div className="relative overflow-hidden">
       <div
-        className={`flex gap-4 ${
-          prefersReducedMotion
-            ? 'flex-wrap justify-center'
-            : direction === 'left'
-              ? 'animate-marquee-left'
-              : 'animate-marquee-right'
-        } group-hover:[animation-play-state:paused]`}
-        style={prefersReducedMotion ? undefined : { width: 'max-content' }}
+        className={`flex w-max gap-4 ${
+          direction === 'left'
+            ? 'animate-marquee-left'
+            : 'animate-marquee-right'
+        } group-hover:[animation-play-state:paused] motion-reduce:w-auto motion-reduce:animate-none motion-reduce:flex-wrap motion-reduce:justify-center`}
       >
-        {(prefersReducedMotion ? skills : tripled).map((skill, i) => (
+        {tripled.map((skill, i) => (
           <SkillPill key={`${skill.name}-${i}`} skill={skill} />
         ))}
       </div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -148,19 +130,12 @@ export default function Skills() {
             key={index}
             skills={row}
             direction={index % 2 === 0 ? 'left' : 'right'}
-            index={index}
           />
         ))}
       </div>
 
       {/* Currently learning */}
-      <motion.div
-        className="mt-12 flex justify-center px-4 md:mt-16"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        viewport={{ once: true, amount: 0.5 }}
-      >
+      <div className="mt-12 flex justify-center px-4 md:mt-16">
         <div className="flex items-center gap-2.5 rounded-full border border-dashed border-[#2C3333]/25 bg-white/60 px-5 py-2.5 md:gap-3 md:px-6 md:py-3">
           <img
             src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/go/go-original.svg"
@@ -176,7 +151,7 @@ export default function Skills() {
             into backend systems.
           </p>
         </div>
-      </motion.div>
+      </div>
     </section>
   );
 }

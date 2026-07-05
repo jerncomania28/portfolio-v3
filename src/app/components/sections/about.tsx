@@ -108,7 +108,7 @@ export default function About() {
                 alt="Jeremiah Okon, frontend developer specializing in React and Next.js"
                 className="object-cover"
                 sizes="(max-width: 768px) 240px, 300px"
-                priority
+                loading="lazy"
               />
             </motion.div>
             <motion.div
