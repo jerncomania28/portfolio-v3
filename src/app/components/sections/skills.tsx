@@ -152,6 +152,31 @@ export default function Skills() {
           />
         ))}
       </div>
+
+      {/* Currently learning */}
+      <motion.div
+        className="mt-12 flex justify-center px-4 md:mt-16"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        viewport={{ once: true, amount: 0.5 }}
+      >
+        <div className="flex items-center gap-2.5 rounded-full border border-dashed border-[#2C3333]/25 bg-white/60 px-5 py-2.5 md:gap-3 md:px-6 md:py-3">
+          <img
+            src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/go/go-original.svg"
+            alt="Go"
+            width={22}
+            height={22}
+            className="h-5 w-5 flex-shrink-0 md:h-[22px] md:w-[22px]"
+            loading="lazy"
+          />
+          <p className="font-family-inter text-sm text-[#2C3333]/60 md:text-base">
+            Currently leveling up:{' '}
+            <span className="font-semibold text-[#2C3333]">Go</span> — expanding
+            into backend systems.
+          </p>
+        </div>
+      </motion.div>
     </section>
   );
 }

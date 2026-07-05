@@ -11,7 +11,8 @@ export function useReducedMotion(): boolean {
 export function useCountUp(
   target: number,
   duration: number = 2000,
-  startOnView: boolean = true
+  startOnView: boolean = true,
+  decimals: number = 0
 ) {
   const [count, setCount] = useState(0);
   const [hasStarted, setHasStarted] = useState(false);
@@ -48,7 +49,8 @@ export function useCountUp(
       const elapsed = currentTime - startTime;
       const progress = Math.min(elapsed / duration, 1);
       const eased = 1 - Math.pow(1 - progress, 3);
-      setCount(Math.round(eased * target));
+      const factor = 10 ** decimals;
+      setCount(Math.round(eased * target * factor) / factor);
 
       if (progress < 1) {
         animationFrame = requestAnimationFrame(animate);
@@ -58,7 +60,7 @@ export function useCountUp(
     animationFrame = requestAnimationFrame(animate);
 
     return () => cancelAnimationFrame(animationFrame);
-  }, [hasStarted, target, duration]);
+  }, [hasStarted, target, duration, decimals]);
 
   return { count, ref };
 }

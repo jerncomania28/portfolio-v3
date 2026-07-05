@@ -23,7 +23,7 @@ function getServerSnapshot() {
   return null;
 }
 
-export function NigeriaClock() {
+export function LocalTimeClock() {
   const time = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
   if (!time) {

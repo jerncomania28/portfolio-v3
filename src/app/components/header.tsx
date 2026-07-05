@@ -7,6 +7,8 @@ import { sendGAEvent } from '@next/third-parties/google';
 import { SlashIcon, X } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 
+import { EMAIL } from '@/lib/constant';
+
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -15,7 +17,7 @@ import {
   BreadcrumbSeparator,
 } from '@/ui/breadcrumb';
 import { Button } from '@/ui/button';
-import { NigeriaClock } from '@/ui/nigeria-clock';
+import { LocalTimeClock } from '@/ui/local-time-clock';
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -26,6 +28,13 @@ export default function Header() {
   ) => {
     e.preventDefault();
     setIsMobileMenuOpen(false);
+    sendGAEvent({
+      event: 'nav_click',
+      value: id,
+      click_location: 'header',
+      event_category: 'engagement',
+      event_label: 'nav_link',
+    });
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -35,7 +44,22 @@ export default function Header() {
   const navLinks = [
     { id: 'home', label: 'Home' },
     { id: 'about', label: 'About' },
+    { id: 'services', label: 'Services' },
     { id: 'work', label: 'Work' },
+    { id: 'reviews', label: 'Reviews' },
+    { id: 'content', label: 'Content' },
+    { id: 'contact', label: 'Contact' },
+  ];
+
+  // Desktop keeps the nav compact so the header doesn't crowd the hero:
+  // core links always show, secondary ones only on wide screens, and the
+  // full list lives in the mobile menu (the JO logo anchors to #home).
+  const desktopLinks: { id: string; label: string; wideOnly?: boolean }[] = [
+    { id: 'about', label: 'About' },
+    { id: 'services', label: 'Services', wideOnly: true },
+    { id: 'work', label: 'Work' },
+    { id: 'reviews', label: 'Reviews', wideOnly: true },
+    { id: 'contact', label: 'Contact' },
   ];
 
   return (
@@ -59,29 +83,36 @@ export default function Header() {
           />
         </motion.a>
         <div className="flex flex-col items-center justify-center gap-3">
-          <NigeriaClock />
+          <LocalTimeClock />
           <Link
-            href="mailto:okonjeremiahprogs@gmail.com"
+            href={`mailto:${EMAIL}`}
             target="_blank"
             className="text-footer-background hidden text-xl leading-[100%] font-medium -tracking-[1%] md:inline-block"
             onClick={() => {
               sendGAEvent({
                 event: 'email_click',
-                value: 'okonjeremiahprogs@gmail.com',
+                value: EMAIL,
                 click_location: 'header',
                 event_category: 'engagement',
                 event_label: 'contact_email',
               });
             }}
           >
-            okonjeremiahprogs@gmail.com
+            {EMAIL}
           </Link>
         </div>
 
         <Breadcrumb className="hidden md:inline-block">
-          <BreadcrumbList className="text-xl leading-[100%] font-normal -tracking-[2%] text-[#666666B2]">
-            {navLinks.map((link, index) => (
-              <div key={link.id} className="flex items-center">
+          <BreadcrumbList className="text-base leading-[100%] font-normal -tracking-[2%] text-[#666666B2] lg:text-lg">
+            {desktopLinks.map((link, index) => (
+              <div
+                key={link.id}
+                className={
+                  link.wideOnly
+                    ? 'hidden items-center xl:flex'
+                    : 'flex items-center'
+                }
+              >
                 <BreadcrumbItem>
                   <BreadcrumbLink
                     asChild
@@ -95,7 +126,7 @@ export default function Header() {
                     </a>
                   </BreadcrumbLink>
                 </BreadcrumbItem>
-                {index < navLinks.length - 1 && (
+                {index < desktopLinks.length - 1 && (
                   <BreadcrumbSeparator>
                     <SlashIcon className="text-footer-background" />
                   </BreadcrumbSeparator>
@@ -133,7 +164,7 @@ export default function Header() {
             </Button>
 
             <motion.nav
-              className="flex flex-col items-center gap-8"
+              className="flex flex-col items-center gap-5"
               initial="hidden"
               animate="visible"
               variants={{
@@ -152,7 +183,7 @@ export default function Header() {
                   key={link.id}
                   href={`#${link.id}`}
                   onClick={(e) => handleNavClick(e, link.id)}
-                  className="text-6xl font-bold tracking-tighter text-white transition-colors hover:text-gray-300"
+                  className="text-4xl font-bold tracking-tighter text-white transition-colors hover:text-gray-300"
                   variants={{
                     hidden: { opacity: 0, y: 20 },
                     visible: {

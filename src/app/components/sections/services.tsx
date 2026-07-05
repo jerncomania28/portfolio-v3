@@ -96,7 +96,10 @@ export default function Services() {
   };
 
   return (
-    <section className="relative w-full snap-start px-4 py-20 md:px-10 md:py-32">
+    <section
+      id="services"
+      className="relative w-full snap-start px-4 py-20 md:px-10 md:py-32"
+    >
       {/* Header */}
       <div className="mb-12 flex flex-col items-center gap-4 text-center md:mb-16">
         <span className="font-family-inter text-xs font-medium tracking-[0.3em] text-[#2C3333]/50 uppercase">

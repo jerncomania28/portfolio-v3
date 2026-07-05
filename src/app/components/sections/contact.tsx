@@ -8,7 +8,7 @@ import { motion } from 'motion/react';
 
 import { CalendlyModal } from '@/components/calendly-modal';
 
-import { BOOK_A_CALL } from '@/lib/constant';
+import { BOOK_A_CALL, EMAIL } from '@/lib/constant';
 import { useReducedMotion } from '@/lib/hooks';
 
 export default function Contact() {
@@ -16,7 +16,10 @@ export default function Contact() {
   const prefersReducedMotion = useReducedMotion();
 
   return (
-    <section className="relative flex w-full snap-start flex-col items-center justify-center overflow-hidden px-4 py-24 md:min-h-[80vh] md:px-10 md:py-32">
+    <section
+      id="contact"
+      className="relative flex w-full snap-start flex-col items-center justify-center overflow-hidden px-4 py-24 md:min-h-[80vh] md:px-10 md:py-32"
+    >
       {/* Background gradient mesh */}
       <div className="absolute inset-0 -z-10 overflow-hidden">
         <div
@@ -124,7 +127,7 @@ export default function Contact() {
 
         {/* Secondary CTA */}
         <motion.a
-          href="https://mail.google.com/mail/?view=cm&to=okonjeremiahprogs@gmail.com&su=Project%20Inquiry"
+          href={`https://mail.google.com/mail/?view=cm&to=${EMAIL}&su=Project%20Inquiry`}
           target="_blank"
           rel="noopener noreferrer"
           className="group relative overflow-hidden rounded-full px-10 py-5 shadow-2xl transition-all duration-300 hover:shadow-[0_0_60px_rgba(123,182,221,0.25)] md:px-12 md:py-6"

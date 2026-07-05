@@ -1,13 +1,24 @@
+import {
+  EMAIL,
+  GITHUB_URL,
+  LINKEDIN_URL,
+  SITE_URL,
+  TIKTOK_URL,
+  UPWORK_PROFILE_URL,
+  YOUTUBE_CHANNEL_URL,
+} from '@/lib/constant';
+
 export default function StructuredData() {
   const personSchema = {
-    '@context': 'https://schema.org',
     '@type': 'Person',
+    '@id': `${SITE_URL}/#person`,
     name: 'Jeremiah Okon',
     jobTitle: 'Frontend Developer',
     description:
       'Experienced Frontend Developer specializing in React, Next.js, and TypeScript',
-    url: 'https://jeremiahokon.com',
-    email: 'okonjeremiahprogs@gmail.com',
+    url: SITE_URL,
+    image: `${SITE_URL}/assets/profile.jpg`,
+    email: EMAIL,
     address: {
       '@type': 'PostalAddress',
       addressLocality: 'Ilorin',
@@ -15,8 +26,11 @@ export default function StructuredData() {
       addressCountry: 'Nigeria',
     },
     sameAs: [
-      'https://www.linkedin.com/in/okon-jeremiah/',
-      'https://github.com/jerncomania28',
+      LINKEDIN_URL,
+      GITHUB_URL,
+      YOUTUBE_CHANNEL_URL,
+      TIKTOK_URL,
+      ...(UPWORK_PROFILE_URL ? [UPWORK_PROFILE_URL] : []),
     ],
     knowsAbout: [
       'React',
@@ -31,6 +45,7 @@ export default function StructuredData() {
       'Animation',
       'SEO Optimization',
       'Web Performance',
+      'Go (Programming Language)',
     ],
     alumniOf: {
       '@type': 'Organization',
@@ -38,12 +53,20 @@ export default function StructuredData() {
     },
   };
 
+  const profilePageSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'ProfilePage',
+    url: SITE_URL,
+    name: 'Jeremiah Okon - Frontend Developer',
+    mainEntity: personSchema,
+  };
+
   const websiteSchema = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: 'Jeremiah Okon Portfolio',
     description: 'Portfolio showcasing frontend development work and projects',
-    url: 'https://jeremiahokon.pro',
+    url: SITE_URL,
     author: {
       '@type': 'Person',
       name: 'Jeremiah Okon',
@@ -57,9 +80,9 @@ export default function StructuredData() {
     name: 'Jeremiah Okon - Frontend Development Services',
     description:
       'Professional frontend development services specializing in React, Next.js, and modern web technologies',
-    url: 'https://jeremiahokon.pro',
+    url: SITE_URL,
     telephone: '',
-    email: 'okonjeremiahprogs@gmail.com',
+    email: EMAIL,
     address: {
       '@type': 'PostalAddress',
       addressLocality: 'Ilorin',
@@ -85,7 +108,7 @@ export default function StructuredData() {
     '@type': 'CollectionPage',
     name: 'Jeremiah Okon - Portfolio',
     description: 'A collection of frontend development projects and work',
-    url: 'https://jeremiahokon.pro',
+    url: SITE_URL,
     author: {
       '@type': 'Person',
       name: 'Jeremiah Okon',
@@ -162,7 +185,7 @@ export default function StructuredData() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(profilePageSchema) }}
       />
       <script
         type="application/ld+json"

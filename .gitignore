@@ -47,3 +47,5 @@ scripts/
 
 # playwright mcp
 .playwright-mcp/
+
+/docs

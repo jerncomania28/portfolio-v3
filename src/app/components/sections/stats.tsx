@@ -1,29 +1,83 @@
 'use client';
 
+import { sendGAEvent } from '@next/third-parties/google';
+
+import { ArrowUpRight } from 'lucide-react';
 import { motion } from 'motion/react';
 
+import { UPWORK_PROFILE_URL } from '@/lib/constant';
 import { useCountUp, useReducedMotion } from '@/lib/hooks';
 
-const stats = [
-  { target: 35, suffix: '%', label: 'Conversion Increase' },
-  { target: 50, suffix: '%', label: 'Faster Interactions' },
-  { target: 98, suffix: '', label: 'Core Web Vitals' },
-  { target: 4, suffix: '+', label: 'Years Experience' },
-];
-
-function StatItem({
-  target,
-  suffix,
-  label,
-  index,
-}: {
+interface Stat {
   target: number;
   suffix: string;
+  decimals: number;
   label: string;
-  index: number;
-}) {
+  href?: string;
+}
+
+// Every number here is verifiable: years/projects are backed by the work
+// section, the Upwork stats link straight to the profile.
+const stats: Stat[] = [
+  { target: 4, suffix: '+', decimals: 0, label: 'Years Experience' },
+  { target: 15, suffix: '+', decimals: 0, label: 'Projects Shipped' },
+  {
+    target: 4.9,
+    suffix: '★',
+    decimals: 1,
+    label: 'Avg. Upwork Rating',
+    href: UPWORK_PROFILE_URL,
+  },
+  {
+    target: 5,
+    suffix: '',
+    decimals: 0,
+    label: 'Upwork Client Reviews',
+    href: UPWORK_PROFILE_URL,
+  },
+];
+
+function StatItem({ stat, index }: { stat: Stat; index: number }) {
+  const { target, suffix, decimals, label, href } = stat;
   const prefersReducedMotion = useReducedMotion();
-  const { count, ref } = useCountUp(target, prefersReducedMotion ? 0 : 2000);
+  const { count, ref } = useCountUp(
+    target,
+    prefersReducedMotion ? 0 : 2000,
+    true,
+    decimals
+  );
+
+  const displayValue = (prefersReducedMotion ? target : count).toFixed(
+    decimals
+  );
+
+  const content = (
+    <>
+      <span
+        className={`leading-none font-bold text-[#2C3333] ${
+          href
+            ? 'transition-colors duration-300 group-hover/stat:text-[#5BA4D1]'
+            : ''
+        }`}
+        style={{ fontSize: 'clamp(3rem, 8vw, 7rem)' }}
+      >
+        {displayValue}
+        {suffix === '★' ? (
+          <span className="text-[#e58f2a]" style={{ fontSize: '0.6em' }}>
+            {suffix}
+          </span>
+        ) : (
+          suffix
+        )}
+      </span>
+      <span className="font-family-inter flex items-center gap-1 text-xs font-medium tracking-[0.2em] text-[#2C3333]/40 uppercase md:text-sm">
+        {label}
+        {href && (
+          <ArrowUpRight className="h-3.5 w-3.5 opacity-0 transition-opacity duration-300 group-hover/stat:opacity-100" />
+        )}
+      </span>
+    </>
+  );
 
   return (
     <motion.div
@@ -34,16 +88,28 @@ function StatItem({
       transition={{ duration: 0.6, delay: index * 0.1 }}
       viewport={{ once: true, amount: 0.5 }}
     >
-      <span
-        className="leading-none font-bold text-[#2C3333]"
-        style={{ fontSize: 'clamp(3rem, 8vw, 7rem)' }}
-      >
-        {prefersReducedMotion ? target : count}
-        {suffix}
-      </span>
-      <span className="font-family-inter text-xs font-medium tracking-[0.2em] text-[#2C3333]/40 uppercase md:text-sm">
-        {label}
-      </span>
+      {href ? (
+        <a
+          href={href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group/stat flex flex-col items-center gap-2"
+          aria-label={`${label} — view on Upwork`}
+          onClick={() => {
+            sendGAEvent({
+              event: 'upwork_click',
+              value: label,
+              click_location: 'stats_section',
+              event_category: 'engagement',
+              event_label: 'verifiable_stat',
+            });
+          }}
+        >
+          {content}
+        </a>
+      ) : (
+        content
+      )}
     </motion.div>
   );
 }
@@ -56,7 +122,7 @@ export default function Stats() {
 
       <div className="mx-auto grid max-w-5xl grid-cols-2 gap-10 md:grid-cols-4 md:gap-8">
         {stats.map((stat, index) => (
-          <StatItem key={stat.label} {...stat} index={index} />
+          <StatItem key={stat.label} stat={stat} index={index} />
         ))}
       </div>
 

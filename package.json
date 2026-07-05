@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build",
+    "build": "node scripts/sync-shorts.mjs && next build",
+    "sync-shorts": "node scripts/sync-shorts.mjs",
     "start": "next start",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint --ext .js,.jsx,.ts,.tsx --fix",

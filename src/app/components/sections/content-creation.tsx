@@ -1,34 +1,41 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { sendGAEvent } from '@next/third-parties/google';
 
 import { Play } from 'lucide-react';
 import { motion } from 'motion/react';
 
+import { TIKTOK_URL, YOUTUBE_CHANNEL_URL } from '@/lib/constant';
 import { useReducedMotion } from '@/lib/hooks';
+import shortsFallback from '@/lib/shorts-fallback.json';
+import { formatCompact } from '@/lib/utils';
+import type { ShortVideoData } from '@/lib/youtube';
 
-interface ShortVideo {
-  id: string;
-  title: string;
+const VIEW_COUNT_DISPLAY_THRESHOLD = 1000;
+
+// Thumbnail fallback chain: API-provided url → maxresdefault → hqdefault
+// (some videos never get a maxres thumbnail rendered).
+function thumbnailCandidates(video: ShortVideoData): string[] {
+  const candidates = [
+    `https://i.ytimg.com/vi/${video.id}/maxresdefault.jpg`,
+    `https://i.ytimg.com/vi/${video.id}/hqdefault.jpg`,
+  ];
+  if (video.thumbnailUrl && !candidates.includes(video.thumbnailUrl)) {
+    candidates.unshift(video.thumbnailUrl);
+  }
+
+  return candidates;
 }
 
-// Vertical YouTube Shorts — embedded inline via a click-to-load facade.
-const videos: ShortVideo[] = [
-  { id: 'he-uobSPSzY', title: 'On the dev grind' },
-  { id: '2xFkMccBZo0', title: 'Building in public' },
-  { id: 'UTmr9NrpPUk', title: 'Frontend tips' },
-  { id: 'QWuZ9gC0B94', title: 'Behind the build' },
-  { id: 'CuOJ4VC9RkY', title: 'Dev life' },
-];
-
-const YOUTUBE_CHANNEL =
-  'https://www.youtube.com/channel/UCcmp0d3tTWEbIJkMNVvG9pw';
-const TIKTOK_PROFILE = 'https://www.tiktok.com/@jay_state.mind';
-
-function VideoCard({ video }: { video: ShortVideo }) {
+function VideoCard({ video }: { video: ShortVideoData }) {
   const [active, setActive] = useState(false);
+  const [thumbIndex, setThumbIndex] = useState(0);
   const prefersReducedMotion = useReducedMotion();
+
+  const thumbnails = thumbnailCandidates(video);
+  const thumbnailSrc = thumbnails[Math.min(thumbIndex, thumbnails.length - 1)];
 
   return (
     <motion.div
@@ -76,15 +83,26 @@ function VideoCard({ video }: { video: ShortVideo }) {
             className="group absolute inset-0 h-full w-full overflow-hidden rounded-[1.8rem]"
             aria-label={`Play ${video.title}`}
           >
-            {/* Poster (plain img to avoid external-domain config) */}
-            <img
-              src={`https://i.ytimg.com/vi/${video.id}/hqdefault.jpg`}
+            <Image
+              src={thumbnailSrc}
               alt={video.title}
-              loading="lazy"
-              className="absolute inset-0 h-full w-full scale-150 object-cover transition-transform duration-500 group-hover:scale-[1.6]"
+              fill
+              sizes="(max-width: 640px) 100vw, 360px"
+              onError={() => setThumbIndex((i) => i + 1)}
+              className="scale-150 object-cover transition-transform duration-500 group-hover:scale-[1.6]"
             />
             {/* Gradient overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20" />
+
+            {/* View count — hidden below the threshold so early low
+                numbers don't undercut credibility with potential clients */}
+            {video.viewCount !== null &&
+              video.viewCount >= VIEW_COUNT_DISPLAY_THRESHOLD && (
+                <span className="font-family-inter absolute top-8 right-4 z-10 flex items-center gap-1.5 rounded-full bg-black/50 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur-sm">
+                  <Play className="h-3 w-3 fill-white text-white" />
+                  {formatCompact(video.viewCount)} views
+                </span>
+              )}
 
             {/* Play button */}
             <span className="absolute top-1/2 left-1/2 flex h-20 w-20 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 shadow-lg backdrop-blur transition-transform duration-300 group-hover:scale-110">
@@ -102,11 +120,20 @@ function VideoCard({ video }: { video: ShortVideo }) {
   );
 }
 
-export default function ContentCreation() {
+export default function ContentCreation({
+  videos,
+}: {
+  videos: ShortVideoData[] | null;
+}) {
   const prefersReducedMotion = useReducedMotion();
 
+  const list: ShortVideoData[] = videos ?? shortsFallback.videos;
+
   return (
-    <section className="relative flex w-full snap-start flex-col items-center gap-10 px-4 py-20 md:gap-14 md:px-10 md:py-32">
+    <section
+      id="content"
+      className="relative flex w-full snap-start flex-col items-center gap-10 px-4 py-20 md:gap-14 md:px-10 md:py-32"
+    >
       {/* Eyebrow + Heading */}
       <div className="flex flex-col items-center gap-4 text-center">
         <span className="font-family-inter text-xs font-medium tracking-[0.3em] text-[#2C3333]/50 uppercase">
@@ -143,7 +170,7 @@ export default function ContentCreation() {
         whileInView="visible"
         viewport={{ once: true, amount: 0.1 }}
       >
-        {videos.map((video) => (
+        {list.map((video) => (
           <VideoCard key={video.id} video={video} />
         ))}
       </motion.div>
@@ -151,7 +178,7 @@ export default function ContentCreation() {
       {/* Platform links */}
       <div className="flex flex-col items-center gap-4 sm:flex-row">
         <a
-          href={YOUTUBE_CHANNEL}
+          href={YOUTUBE_CHANNEL_URL}
           target="_blank"
           rel="noopener noreferrer"
           onClick={() => {
@@ -159,7 +186,7 @@ export default function ContentCreation() {
               event: 'social_click',
               value: 'YouTube',
               social_platform: 'YouTube',
-              social_url: YOUTUBE_CHANNEL,
+              social_url: YOUTUBE_CHANNEL_URL,
               event_category: 'engagement',
               event_label: 'content_creation_section',
             });
@@ -171,7 +198,7 @@ export default function ContentCreation() {
           </span>
         </a>
         <a
-          href={TIKTOK_PROFILE}
+          href={TIKTOK_URL}
           target="_blank"
           rel="noopener noreferrer"
           onClick={() => {
@@ -179,7 +206,7 @@ export default function ContentCreation() {
               event: 'social_click',
               value: 'TikTok',
               social_platform: 'TikTok',
-              social_url: TIKTOK_PROFILE,
+              social_url: TIKTOK_URL,
               event_category: 'engagement',
               event_label: 'content_creation_section',
             });

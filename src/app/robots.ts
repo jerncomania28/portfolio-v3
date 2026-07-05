@@ -1,7 +1,9 @@
 import type { MetadataRoute } from 'next';
 
+import { SITE_URL } from '@/lib/constant';
+
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = 'https://jeremiahokon.pro';
+  const baseUrl = SITE_URL;
 
   return {
     rules: [

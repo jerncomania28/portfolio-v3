@@ -1,26 +1,14 @@
 import type { MetadataRoute } from 'next';
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://jeremiahokon.pro';
+import { SITE_URL } from '@/lib/constant';
 
+export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
-      url: baseUrl,
+      url: SITE_URL,
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 1,
-    },
-    {
-      url: `${baseUrl}#about`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}#work`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.9,
     },
   ];
 }

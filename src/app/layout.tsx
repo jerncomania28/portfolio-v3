@@ -8,6 +8,8 @@ import Footer from '@/components/footer';
 import Header from '@/components/header';
 import StructuredData from '@/components/structured-data';
 
+import { SITE_URL } from '@/lib/constant';
+
 import './globals.css';
 
 const neueMontreal = localFont({
@@ -79,7 +81,7 @@ export const metadata: Metadata = {
     template: '%s | Jeremiah Okon',
   },
   description:
-    'Experienced Frontend Developer specializing in React, Next.js, and TypeScript. Based in Ilorin, Nigeria. Creating seamless animations and engaging user interactions for high-converting websites.',
+    'Experienced Frontend Developer specializing in React, Next.js, and TypeScript. I build fast, high-converting websites with seamless animations and interactions that keep users engaged.',
   keywords: [
     'Frontend Developer',
     'React Developer',
@@ -100,7 +102,7 @@ export const metadata: Metadata = {
     'Portfolio Website',
     'Hire Frontend Developer',
   ],
-  authors: [{ name: 'Jeremiah Okon', url: 'https://jeremiahokon.online' }],
+  authors: [{ name: 'Jeremiah Okon', url: SITE_URL }],
   creator: 'Jeremiah Okon',
   publisher: 'Jeremiah Okon',
   formatDetection: {
@@ -108,7 +110,7 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://jeremiahokon.online'),
+  metadataBase: new URL(SITE_URL),
   alternates: {
     canonical: '/',
   },
@@ -116,7 +118,7 @@ export const metadata: Metadata = {
     title: 'Jeremiah Okon - Frontend Developer | React & Next.js Expert',
     description:
       'Experienced Frontend Developer specializing in React, Next.js, and TypeScript. Creating seamless animations and engaging user interactions for high-converting websites.',
-    url: 'https://jeremiahokon.online',
+    url: SITE_URL,
     siteName: 'Jeremiah Okon Portfolio',
     locale: 'en_US',
     type: 'website',
@@ -161,9 +163,13 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
-  verification: {
-    google: 'your-google-verification-code',
-  },
+  ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
+    ? {
+        verification: {
+          google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+        },
+      }
+    : {}),
 };
 
 export default function RootLayout({

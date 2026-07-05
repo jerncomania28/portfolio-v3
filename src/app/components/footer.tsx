@@ -6,7 +6,14 @@ import { sendGAEvent } from '@next/third-parties/google';
 import { Calendar, ChevronUp } from 'lucide-react';
 import { motion, useInView } from 'motion/react';
 
-import { BOOK_A_CALL } from '@/lib/constant';
+import {
+  BOOK_A_CALL,
+  EMAIL,
+  GITHUB_URL,
+  LINKEDIN_URL,
+  TIKTOK_URL,
+  YOUTUBE_CHANNEL_URL,
+} from '@/lib/constant';
 
 import { CalendlyModal } from './calendly-modal';
 
@@ -57,13 +64,10 @@ export default function Footer() {
   };
 
   const socialLinks = [
-    { name: 'Linkedin', url: 'https://www.linkedin.com/in/okon-jeremiah/' },
-    { name: 'Github', url: 'https://github.com/jerncomania28' },
-    {
-      name: 'Youtube',
-      url: 'https://www.youtube.com/channel/UCcmp0d3tTWEbIJkMNVvG9pw',
-    },
-    { name: 'Tiktok', url: 'https://www.tiktok.com/@jay_state.mind' },
+    { name: 'Linkedin', url: LINKEDIN_URL },
+    { name: 'Github', url: GITHUB_URL },
+    { name: 'Youtube', url: YOUTUBE_CHANNEL_URL },
+    { name: 'Tiktok', url: TIKTOK_URL },
   ];
 
   return (
@@ -185,7 +189,7 @@ export default function Footer() {
           {/* Email with Magnetic Effect */}
           <motion.div variants={itemVariants}>
             <motion.a
-              href="mailto:okonjeremiahprogs@gmail.com"
+              href={`mailto:${EMAIL}`}
               target="_blank"
               className="relative text-2xl font-medium md:text-3xl"
               onMouseEnter={() => setIsEmailHovered(true)}
@@ -195,7 +199,7 @@ export default function Footer() {
               onClick={() => {
                 sendGAEvent({
                   event: 'email_click',
-                  value: 'okonjeremiahprogs@gmail.com',
+                  value: EMAIL,
                   click_location: 'footer',
                   event_category: 'engagement',
                   event_label: 'contact_email',
@@ -209,7 +213,7 @@ export default function Footer() {
                 }}
                 transition={{ duration: 0.3 }}
               >
-                okonjeremiahprogs@gmail.com
+                {EMAIL}
               </motion.span>
               <motion.div
                 className="absolute inset-0 -z-0 rounded-lg bg-white/10"

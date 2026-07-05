@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { sendGAEvent } from '@next/third-parties/google';
 
-import { Calendar, FileDown } from 'lucide-react';
+import { Calendar } from 'lucide-react';
 import { motion, useMotionValue, useSpring } from 'motion/react';
 
 import { CalendlyModal } from '@/components/calendly-modal';
@@ -92,9 +92,17 @@ export default function Hero() {
         />
       )}
 
-      <div className="relative z-10 flex w-full flex-1 items-center justify-center">
+      <div className="relative z-10 flex w-full flex-1 flex-col items-center justify-center gap-6 md:gap-8">
+        <motion.p
+          className="font-family-inter text-center text-xs font-medium tracking-[0.3em] text-[#2C3333]/60 uppercase md:text-sm"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          Jeremiah Okon — Frontend Developer · React &amp; Next.js Expert
+        </motion.p>
         <motion.h1
-          className="text-footer-background text-[75px] leading-[100%] font-bold tracking-tighter md:text-[110px] lg:text-[140px] xl:text-[170px] 2xl:text-[200px]"
+          className="text-footer-background text-[clamp(4.5rem,12vw,12.5rem)] leading-[100%] font-bold tracking-tighter"
           variants={container}
           initial="hidden"
           animate="visible"
@@ -118,108 +126,82 @@ export default function Hero() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 2, duration: 0.8 }}
       >
-        {/* CTA Buttons - Side by side */}
-        <div className="flex flex-col items-center gap-4 sm:flex-row sm:gap-5">
-          <motion.button
-            onClick={() => {
-              sendGAEvent({
-                event: 'book_call_click',
-                value: 'Book a Free Call',
-                button_location: 'hero',
-                event_category: 'conversion',
-                event_label: 'cta_button',
-              });
-              setIsCalendlyOpen(true);
-            }}
-            className="bg-footer-background group relative overflow-hidden rounded-full px-10 py-5 text-white shadow-2xl transition-all duration-300 hover:shadow-[0_0_60px_rgba(123,182,221,0.4)] md:px-12 md:py-6"
-            whileHover={
-              prefersReducedMotion ? undefined : { scale: 1.05, y: -4 }
-            }
-            whileTap={prefersReducedMotion ? undefined : { scale: 0.95 }}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 2.5, duration: 0.8 }}
-          >
-            {/* Animated gradient background */}
-            <motion.div
-              className="absolute inset-0 bg-gradient-to-r from-[#7BB6DD] via-[#5BA4D1] to-[#7BB6DD]"
-              animate={
-                prefersReducedMotion
-                  ? undefined
-                  : {
-                      backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
-                    }
+        {/* CTA */}
+        <div className="flex flex-col items-center gap-4 md:items-start">
+          <div className="flex flex-col items-center gap-4 sm:flex-row sm:gap-5">
+            <motion.button
+              onClick={() => {
+                sendGAEvent({
+                  event: 'book_call_click',
+                  value: 'Book a Free Call',
+                  button_location: 'hero',
+                  event_category: 'conversion',
+                  event_label: 'cta_button',
+                });
+                setIsCalendlyOpen(true);
+              }}
+              className="bg-footer-background group relative overflow-hidden rounded-full px-10 py-5 text-white shadow-2xl transition-all duration-300 hover:shadow-[0_0_60px_rgba(123,182,221,0.4)] md:px-12 md:py-6"
+              whileHover={
+                prefersReducedMotion ? undefined : { scale: 1.05, y: -4 }
               }
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                ease: 'linear',
-              }}
-              style={{
-                backgroundSize: '200% 100%',
-              }}
-            />
-
-            <span className="relative z-10 flex items-center gap-3 text-xl font-black tracking-wide uppercase md:text-2xl">
+              whileTap={prefersReducedMotion ? undefined : { scale: 0.95 }}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 2.5, duration: 0.8 }}
+            >
+              {/* Animated gradient background */}
               <motion.div
+                className="absolute inset-0 bg-gradient-to-r from-[#7BB6DD] via-[#5BA4D1] to-[#7BB6DD]"
                 animate={
                   prefersReducedMotion
                     ? undefined
                     : {
-                        scale: [1, 1.2, 1],
-                        rotate: [0, 5, -5, 0],
+                        backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
                       }
                 }
                 transition={{
-                  duration: 2,
+                  duration: 3,
                   repeat: Infinity,
-                  ease: 'easeInOut',
+                  ease: 'linear',
                 }}
-              >
-                <Calendar className="h-7 w-7 md:h-8 md:w-8" />
-              </motion.div>
-              Book a Free Call
-            </span>
+                style={{
+                  backgroundSize: '200% 100%',
+                }}
+              />
 
-            {/* Ripple effect on hover */}
-            <motion.div
-              className="absolute inset-0 rounded-full bg-white/50"
-              initial={{ scale: 0, opacity: 0.5 }}
-              whileHover={{
-                scale: 2,
-                opacity: 0,
-                transition: { duration: 0.6 },
-              }}
-            />
-          </motion.button>
+              <span className="relative z-10 flex items-center gap-3 text-xl font-black tracking-wide uppercase md:text-2xl">
+                <motion.div
+                  animate={
+                    prefersReducedMotion
+                      ? undefined
+                      : {
+                          scale: [1, 1.2, 1],
+                          rotate: [0, 5, -5, 0],
+                        }
+                  }
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: 'easeInOut',
+                  }}
+                >
+                  <Calendar className="h-7 w-7 md:h-8 md:w-8" />
+                </motion.div>
+                Book a Free Call
+              </span>
 
-          <motion.a
-            href="https://drive.google.com/uc?export=download&id=1esQRz08iQiV0OiasbgGXyHiQ5f_CubGy"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="border-footer-background text-footer-background group relative overflow-hidden rounded-full border-2 px-10 py-5 transition-all duration-300 hover:shadow-[0_0_60px_rgba(123,182,221,0.3)] md:px-12 md:py-6"
-            whileHover={
-              prefersReducedMotion ? undefined : { scale: 1.05, y: -4 }
-            }
-            whileTap={prefersReducedMotion ? undefined : { scale: 0.95 }}
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 2.7, duration: 0.8 }}
-            onClick={() => {
-              sendGAEvent({
-                event: 'download_cv_click',
-                value: 'Download CV',
-                button_location: 'hero',
-                event_category: 'conversion',
-                event_label: 'cv_download',
-              });
-            }}
-          >
-            <span className="relative z-10 flex items-center gap-3 text-xl font-black tracking-wide uppercase md:text-2xl">
-              <FileDown className="h-7 w-7 md:h-8 md:w-8" />
-              Download CV
-            </span>
-          </motion.a>
+              {/* Ripple effect on hover */}
+              <motion.div
+                className="absolute inset-0 rounded-full bg-white/50"
+                initial={{ scale: 0, opacity: 0.5 }}
+                whileHover={{
+                  scale: 2,
+                  opacity: 0,
+                  transition: { duration: 0.6 },
+                }}
+              />
+            </motion.button>
+          </div>
         </div>
 
         {/* Scroll indicator - Right side */}
