@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { sendGAEvent } from '@next/third-parties/google';
 
 import { SlashIcon, X } from 'lucide-react';
-import { AnimatePresence, motion } from 'motion/react';
+import { AnimatePresence, m } from 'motion/react';
 
 import { EMAIL } from '@/lib/constant';
 
@@ -65,7 +65,7 @@ export default function Header() {
   return (
     <>
       <header className="relative z-50 flex w-full items-center justify-between px-4 py-4 md:items-start md:px-10 md:pt-10 md:pb-5">
-        <motion.a
+        <m.a
           href="#home"
           onClick={(e) => handleNavClick(e, 'home')}
           className="group relative cursor-pointer"
@@ -75,13 +75,13 @@ export default function Header() {
           <span className="font-family-playfair text-footer-background text-3xl leading-[100%] font-black tracking-tight italic md:text-4xl">
             JO
           </span>
-          <motion.div
+          <m.div
             className="border-footer-background absolute -inset-2 rounded-full border-2 opacity-0 group-hover:opacity-100"
             initial={{ scale: 0.8, opacity: 0 }}
             whileHover={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.3 }}
           />
-        </motion.a>
+        </m.a>
         <div className="flex flex-col items-center justify-center gap-3">
           <LocalTimeClock />
           <Link
@@ -148,7 +148,7 @@ export default function Header() {
       {/* Mobile Menu */}
       <AnimatePresence>
         {isMobileMenuOpen && (
-          <motion.div
+          <m.div
             className="bg-footer-background fixed inset-0 z-[100] flex flex-col items-center justify-center md:hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -163,7 +163,7 @@ export default function Header() {
               <X className="h-8 w-8" />
             </Button>
 
-            <motion.nav
+            <m.nav
               className="flex flex-col items-center gap-5"
               initial="hidden"
               animate="visible"
@@ -179,7 +179,7 @@ export default function Header() {
               }}
             >
               {navLinks.map((link) => (
-                <motion.a
+                <m.a
                   key={link.id}
                   href={`#${link.id}`}
                   onClick={(e) => handleNavClick(e, link.id)}
@@ -199,19 +199,19 @@ export default function Header() {
                   transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                 >
                   {link.label}
-                </motion.a>
+                </m.a>
               ))}
-            </motion.nav>
+            </m.nav>
 
-            <motion.div
+            <m.div
               className="absolute bottom-8 text-sm text-white/60"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 }}
             >
               Tap anywhere to navigate
-            </motion.div>
-          </motion.div>
+            </m.div>
+          </m.div>
         )}
       </AnimatePresence>
     </>

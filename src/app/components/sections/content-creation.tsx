@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { sendGAEvent } from '@next/third-parties/google';
 
 import { Play } from 'lucide-react';
-import { motion } from 'motion/react';
+import { m } from 'motion/react';
 
 import { TIKTOK_URL, YOUTUBE_CHANNEL_URL } from '@/lib/constant';
 import { useReducedMotion } from '@/lib/hooks';
@@ -38,7 +38,7 @@ function VideoCard({ video }: { video: ShortVideoData }) {
   const thumbnailSrc = thumbnails[Math.min(thumbIndex, thumbnails.length - 1)];
 
   return (
-    <motion.div
+    <m.div
       className="flex w-full justify-center"
       variants={
         prefersReducedMotion
@@ -116,7 +116,7 @@ function VideoCard({ video }: { video: ShortVideoData }) {
           </button>
         )}
       </div>
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -153,7 +153,7 @@ export default function ContentCreation({
       </div>
 
       {/* Grid */}
-      <motion.div
+      <m.div
         className="grid w-full max-w-6xl grid-cols-1 justify-items-center gap-6 sm:grid-cols-2 md:gap-8 lg:grid-cols-3"
         variants={
           prefersReducedMotion
@@ -173,7 +173,7 @@ export default function ContentCreation({
         {list.map((video) => (
           <VideoCard key={video.id} video={video} />
         ))}
-      </motion.div>
+      </m.div>
 
       {/* Platform links */}
       <div className="flex flex-col items-center gap-4 sm:flex-row">

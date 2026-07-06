@@ -4,7 +4,7 @@ import { useRef, useState } from 'react';
 import { sendGAEvent } from '@next/third-parties/google';
 
 import { Calendar, ChevronUp } from 'lucide-react';
-import { motion, useInView } from 'motion/react';
+import { m, useInView } from 'motion/react';
 
 import {
   BOOK_A_CALL,
@@ -77,7 +77,7 @@ export default function Footer() {
     >
       {/* Main Heading with Gradient Animation */}
       <div className="flex w-full flex-col items-center gap-8">
-        <motion.span
+        <m.span
           className="bg-gradient-to-r from-white via-gray-100 to-white bg-clip-text text-center text-[75px] leading-[100%] font-bold tracking-tighter md:text-[125px] lg:text-[164px]"
           variants={headingVariants}
           initial="hidden"
@@ -85,10 +85,10 @@ export default function Footer() {
         >
           Let&apos;s Create{' '}
           <span className="font-family-instrument italic">Magic!</span>
-        </motion.span>
+        </m.span>
 
         {/* CTA Button */}
-        <motion.button
+        <m.button
           onClick={() => {
             sendGAEvent({
               event: 'book_call_click',
@@ -107,7 +107,7 @@ export default function Footer() {
           whileTap={{ scale: 0.95 }}
         >
           {/* Animated gradient background */}
-          <motion.div
+          <m.div
             className="absolute inset-0 bg-gradient-to-r from-white via-gray-100 to-white"
             animate={{
               backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
@@ -123,7 +123,7 @@ export default function Footer() {
           />
 
           <span className="relative z-10 flex items-center gap-3 text-xl font-black tracking-wide uppercase md:text-2xl">
-            <motion.div
+            <m.div
               animate={{
                 scale: [1, 1.2, 1],
                 rotate: [0, 5, -5, 0],
@@ -135,12 +135,12 @@ export default function Footer() {
               }}
             >
               <Calendar className="h-7 w-7 md:h-8 md:w-8" />
-            </motion.div>
+            </m.div>
             Book a Free Call
           </span>
 
           {/* Ripple effect on hover */}
-          <motion.div
+          <m.div
             className="absolute inset-0 rounded-full bg-white/50"
             initial={{ scale: 0, opacity: 0.5 }}
             whileHover={{
@@ -149,22 +149,22 @@ export default function Footer() {
               transition: { duration: 0.6 },
             }}
           />
-        </motion.button>
+        </m.button>
       </div>
 
-      <motion.div
+      <m.div
         className="relative flex w-full flex-col items-center justify-center gap-6"
         variants={containerVariants}
         initial="hidden"
         animate={isInView ? 'visible' : 'hidden'}
       >
         {/* Scroll to Top - Enhanced with Icon */}
-        <motion.div
+        <m.div
           className="text-xl font-medium lg:absolute lg:top-0 lg:right-0"
           variants={itemVariants}
         >
           <span className="leading-[100%]"> I Scrolled too far, </span>
-          <motion.a
+          <m.a
             href="#"
             onClick={handleScrollToTop}
             className="group inline-flex items-center gap-2 leading-[100%] underline"
@@ -172,7 +172,7 @@ export default function Footer() {
             whileTap={{ scale: 0.95 }}
           >
             send me up
-            <motion.div
+            <m.div
               animate={{ y: [0, -4, 0] }}
               transition={{
                 duration: 1.5,
@@ -181,14 +181,14 @@ export default function Footer() {
               }}
             >
               <ChevronUp className="h-5 w-5 transition-colors group-hover:text-gray-300" />
-            </motion.div>
-          </motion.a>
-        </motion.div>
+            </m.div>
+          </m.a>
+        </m.div>
 
         <div className="flex flex-col items-center justify-center gap-6">
           {/* Email with Magnetic Effect */}
-          <motion.div variants={itemVariants}>
-            <motion.a
+          <m.div variants={itemVariants}>
+            <m.a
               href={`mailto:${EMAIL}`}
               target="_blank"
               className="relative text-2xl font-medium md:text-3xl"
@@ -206,7 +206,7 @@ export default function Footer() {
                 });
               }}
             >
-              <motion.span
+              <m.span
                 className="relative z-10"
                 animate={{
                   color: isEmailHovered ? '#d1d5db' : '#ffffff',
@@ -214,8 +214,8 @@ export default function Footer() {
                 transition={{ duration: 0.3 }}
               >
                 {EMAIL}
-              </motion.span>
-              <motion.div
+              </m.span>
+              <m.div
                 className="absolute inset-0 -z-0 rounded-lg bg-white/10"
                 initial={{ scale: 0, opacity: 0 }}
                 animate={{
@@ -224,16 +224,16 @@ export default function Footer() {
                 }}
                 transition={{ duration: 0.3 }}
               />
-            </motion.a>
-          </motion.div>
+            </m.a>
+          </m.div>
 
           {/* Social Links with Stagger Animation */}
-          <motion.ul
+          <m.ul
             className="flex flex-col items-center gap-3"
             variants={containerVariants}
           >
             {socialLinks.map((link) => (
-              <motion.li key={link.name} variants={itemVariants}>
+              <m.li key={link.name} variants={itemVariants}>
                 <a
                   href={link.url}
                   target="_blank"
@@ -255,14 +255,14 @@ export default function Footer() {
                     <span className="absolute bottom-0 left-0 h-[2px] w-full origin-left scale-x-0 bg-white transition-transform duration-300 ease-out group-hover:scale-x-100" />
                   </span>
                 </a>
-              </motion.li>
+              </m.li>
             ))}
-          </motion.ul>
+          </m.ul>
         </div>
-      </motion.div>
+      </m.div>
 
       {/* Copyright with Fade In */}
-      <motion.span
+      <m.span
         className="text-center text-xs leading-[100%] font-medium uppercase opacity-60 md:text-base"
         variants={itemVariants}
         initial="hidden"
@@ -270,7 +270,7 @@ export default function Footer() {
         transition={{ delay: 0.6 }}
       >
         All rights reserved &copy; {new Date().getFullYear()} • Jeremiah Okon
-      </motion.span>
+      </m.span>
 
       <CalendlyModal
         isOpen={isCalendlyOpen}

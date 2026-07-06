@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { sendGAEvent } from '@next/third-parties/google';
 
 import { Calendar, Mail } from 'lucide-react';
-import { motion } from 'motion/react';
+import { m } from 'motion/react';
 
 import { CalendlyModal } from '@/components/calendly-modal';
 
@@ -40,7 +40,7 @@ export default function Contact() {
       </div>
 
       {/* Heading */}
-      <motion.h2
+      <m.h2
         className={`mb-6 text-center text-5xl leading-[1.05] font-bold tracking-tight md:text-7xl lg:text-8xl xl:text-9xl ${
           prefersReducedMotion
             ? 'text-[#2C3333]'
@@ -56,10 +56,10 @@ export default function Contact() {
           project
         </span>{' '}
         in mind?
-      </motion.h2>
+      </m.h2>
 
       {/* Subline */}
-      <motion.p
+      <m.p
         className="font-family-inter mb-12 text-center text-lg text-[#2C3333]/50 md:text-xl"
         initial={prefersReducedMotion ? undefined : { opacity: 0, y: 20 }}
         whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
@@ -67,10 +67,10 @@ export default function Contact() {
         viewport={{ once: true }}
       >
         Let&apos;s build something worth remembering.
-      </motion.p>
+      </m.p>
 
       {/* Buttons */}
-      <motion.div
+      <m.div
         className="flex flex-col items-center gap-4 sm:flex-row sm:gap-6"
         initial={prefersReducedMotion ? undefined : { opacity: 0, y: 20 }}
         whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
@@ -78,7 +78,7 @@ export default function Contact() {
         viewport={{ once: true }}
       >
         {/* Primary CTA */}
-        <motion.button
+        <m.button
           onClick={() => {
             sendGAEvent({
               event: 'book_call_click',
@@ -94,7 +94,7 @@ export default function Contact() {
           whileTap={prefersReducedMotion ? undefined : { scale: 0.95 }}
         >
           {/* Animated gradient background */}
-          <motion.div
+          <m.div
             className="absolute inset-0 bg-gradient-to-r from-[#7BB6DD] via-[#5BA4D1] to-[#7BB6DD]"
             animate={
               prefersReducedMotion
@@ -105,7 +105,7 @@ export default function Contact() {
             style={{ backgroundSize: '200% 100%' }}
           />
           <span className="relative z-10 flex items-center gap-3 text-lg font-black tracking-wide uppercase md:text-xl">
-            <motion.div
+            <m.div
               animate={
                 prefersReducedMotion
                   ? undefined
@@ -114,19 +114,19 @@ export default function Contact() {
               transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
             >
               <Calendar className="h-6 w-6 md:h-7 md:w-7" />
-            </motion.div>
+            </m.div>
             Book a Free Call
           </span>
           {/* Ripple effect on hover */}
-          <motion.div
+          <m.div
             className="absolute inset-0 rounded-full bg-white/50"
             initial={{ scale: 0, opacity: 0.5 }}
             whileHover={{ scale: 2, opacity: 0, transition: { duration: 0.6 } }}
           />
-        </motion.button>
+        </m.button>
 
         {/* Secondary CTA */}
-        <motion.a
+        <m.a
           href={`https://mail.google.com/mail/?view=cm&to=${EMAIL}&su=Project%20Inquiry`}
           target="_blank"
           rel="noopener noreferrer"
@@ -147,7 +147,7 @@ export default function Contact() {
           <div className="absolute inset-0 rounded-full bg-gradient-to-r from-[#7BB6DD]/20 via-[#5BA4D1]/30 to-[#7BB6DD]/20 backdrop-blur-sm" />
           <div className="absolute inset-[2px] rounded-full bg-white/90" />
           <span className="relative z-10 flex items-center gap-3 text-lg font-black tracking-wide text-[#2C3333] uppercase md:text-xl">
-            <motion.div
+            <m.div
               animate={prefersReducedMotion ? undefined : { y: [0, -3, 0] }}
               transition={{
                 duration: 1.5,
@@ -156,11 +156,11 @@ export default function Contact() {
               }}
             >
               <Mail className="h-6 w-6 text-[#2C3333] md:h-7 md:w-7" />
-            </motion.div>
+            </m.div>
             Send an Email
           </span>
-        </motion.a>
-      </motion.div>
+        </m.a>
+      </m.div>
 
       <CalendlyModal
         isOpen={isCalendlyOpen}

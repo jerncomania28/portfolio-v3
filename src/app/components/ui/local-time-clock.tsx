@@ -2,7 +2,7 @@
 
 import { useSyncExternalStore } from 'react';
 
-import { AnimatePresence, motion } from 'motion/react';
+import { AnimatePresence, m } from 'motion/react';
 
 function subscribe(callback: () => void) {
   const id = setInterval(callback, 1000);
@@ -47,7 +47,7 @@ export function LocalTimeClock() {
   const period = rest.slice(2).trim(); // "PM"
 
   return (
-    <motion.span
+    <m.span
       className="flex flex-col items-center gap-1"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -58,14 +58,14 @@ export function LocalTimeClock() {
       </span>
       <span className="inline-flex items-baseline text-xl leading-[100%] font-normal -tracking-[2%] text-[#666666B2]">
         <span>{hours}</span>
-        <motion.span
+        <m.span
           animate={{ opacity: [1, 0.3, 1] }}
           transition={{ duration: 1, repeat: Infinity, ease: 'easeInOut' }}
         >
           :
-        </motion.span>
+        </m.span>
         <AnimatePresence mode="popLayout">
-          <motion.span
+          <m.span
             key={minutes}
             initial={{ opacity: 0, y: -4 }}
             animate={{ opacity: 1, y: 0 }}
@@ -73,11 +73,11 @@ export function LocalTimeClock() {
             transition={{ duration: 0.3 }}
           >
             {minutes}
-          </motion.span>
+          </m.span>
         </AnimatePresence>
         <span className="ml-1">{period}</span>
         <span className="ml-1.5 text-sm text-[#66666680]">GMT+1</span>
       </span>
-    </motion.span>
+    </m.span>
   );
 }

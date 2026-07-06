@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { sendGAEvent } from '@next/third-parties/google';
 
 import { Calendar } from 'lucide-react';
-import { motion, useMotionValue, useSpring } from 'motion/react';
+import { m, useMotionValue, useSpring } from 'motion/react';
 
 import { CalendlyModal } from '@/components/calendly-modal';
 
@@ -50,7 +50,7 @@ export default function Hero() {
     >
       {/* Cursor-following gradient orb */}
       {!prefersReducedMotion && (
-        <motion.div
+        <m.div
           className="pointer-events-none fixed z-0 h-[500px] w-[500px] rounded-full opacity-20 blur-[120px]"
           style={{
             left: orbX,
@@ -79,7 +79,7 @@ export default function Hero() {
         </h1>
       </div>
 
-      <motion.div
+      <m.div
         className="relative z-10 flex w-full flex-col items-center justify-center gap-6 pb-6 md:flex-row md:items-end md:justify-between md:pb-8"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -88,7 +88,7 @@ export default function Hero() {
         {/* CTA */}
         <div className="flex flex-col items-center gap-4 md:items-start">
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:gap-5">
-            <motion.button
+            <m.button
               onClick={() => {
                 sendGAEvent({
                   event: 'book_call_click',
@@ -109,7 +109,7 @@ export default function Hero() {
               transition={{ delay: 2.5, duration: 0.8 }}
             >
               {/* Animated gradient background */}
-              <motion.div
+              <m.div
                 className="absolute inset-0 bg-gradient-to-r from-[#7BB6DD] via-[#5BA4D1] to-[#7BB6DD]"
                 animate={
                   prefersReducedMotion
@@ -129,7 +129,7 @@ export default function Hero() {
               />
 
               <span className="relative z-10 flex items-center gap-3 text-xl font-black tracking-wide uppercase md:text-2xl">
-                <motion.div
+                <m.div
                   animate={
                     prefersReducedMotion
                       ? undefined
@@ -145,12 +145,12 @@ export default function Hero() {
                   }}
                 >
                   <Calendar className="h-7 w-7 md:h-8 md:w-8" />
-                </motion.div>
+                </m.div>
                 Book a Free Call
               </span>
 
               {/* Ripple effect on hover */}
-              <motion.div
+              <m.div
                 className="absolute inset-0 rounded-full bg-white/50"
                 initial={{ scale: 0, opacity: 0.5 }}
                 whileHover={{
@@ -159,13 +159,13 @@ export default function Hero() {
                   transition: { duration: 0.6 },
                 }}
               />
-            </motion.button>
+            </m.button>
           </div>
         </div>
 
         {/* Scroll indicator - Right side */}
         <div className="hidden flex-col items-center gap-3 md:flex md:flex-row md:gap-5">
-          <motion.span
+          <m.span
             className="text-footer-background text-base leading-[100%] font-medium md:text-lg"
             animate={
               prefersReducedMotion
@@ -181,10 +181,10 @@ export default function Hero() {
             }}
           >
             Scroll to be saved
-          </motion.span>
+          </m.span>
           <ScrollButton />
         </div>
-      </motion.div>
+      </m.div>
 
       <CalendlyModal
         isOpen={isCalendlyOpen}

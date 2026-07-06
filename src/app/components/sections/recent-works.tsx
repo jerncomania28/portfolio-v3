@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { sendGAEvent } from '@next/third-parties/google';
 
-import { motion, useInView } from 'motion/react';
+import { m, useInView } from 'motion/react';
 
 import { useReducedMotion } from '@/lib/hooks';
 
@@ -87,7 +87,7 @@ function ProjectRow({ project, index }: { project: Project; index: number }) {
   const formattedIndex = String(index + 1).padStart(2, '0');
 
   return (
-    <motion.div
+    <m.div
       className="group relative"
       variants={{
         hidden: { opacity: 0, y: 20 },
@@ -125,7 +125,7 @@ function ProjectRow({ project, index }: { project: Project; index: number }) {
         }}
       >
         {/* Hover background */}
-        <motion.div
+        <m.div
           className="absolute inset-0 bg-[#2C3333]/[0.02]"
           initial={{ opacity: 0 }}
           animate={{ opacity: isHovered ? 1 : 0 }}
@@ -153,7 +153,7 @@ function ProjectRow({ project, index }: { project: Project; index: number }) {
         </div>
 
         {/* Right: Arrow */}
-        <motion.div
+        <m.div
           className="relative z-10"
           animate={
             prefersReducedMotion
@@ -174,10 +174,10 @@ function ProjectRow({ project, index }: { project: Project; index: number }) {
             <line x1="7" y1="17" x2="17" y2="7" />
             <polyline points="7 7 17 7 17 17" />
           </svg>
-        </motion.div>
+        </m.div>
 
         {/* Desktop: Hover image preview */}
-        <motion.div
+        <m.div
           className="pointer-events-none absolute top-1/2 right-24 z-20 hidden -translate-y-1/2 md:block"
           initial={{ opacity: 0, x: 30, scale: 0.95 }}
           animate={
@@ -197,11 +197,11 @@ function ProjectRow({ project, index }: { project: Project; index: number }) {
               quality={90}
             />
           </div>
-        </motion.div>
+        </m.div>
       </Link>
 
       {/* Mobile expanded content */}
-      <motion.div
+      <m.div
         className="overflow-hidden px-4 md:hidden"
         initial={false}
         animate={{
@@ -224,18 +224,18 @@ function ProjectRow({ project, index }: { project: Project; index: number }) {
             {project.description}
           </p>
         </div>
-      </motion.div>
+      </m.div>
 
       {/* Bottom border with hover animation */}
       <div className="relative h-px w-full bg-[#C6C6C6]/50">
-        <motion.div
+        <m.div
           className="absolute top-0 left-0 h-full bg-[#2C3333]"
           initial={{ width: '0%' }}
           animate={{ width: isHovered ? '100%' : '0%' }}
           transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
         />
       </div>
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -251,7 +251,7 @@ export default function RecentWorks() {
       className="relative flex w-full snap-start flex-col py-16 md:py-24"
     >
       {/* Header */}
-      <motion.div
+      <m.div
         className="mb-6 flex flex-col gap-4 px-4 text-center md:mb-10 md:px-10 md:text-left"
         initial={prefersReducedMotion ? undefined : { opacity: 0, y: 30 }}
         animate={
@@ -272,13 +272,13 @@ export default function RecentWorks() {
         <p className="font-family-inter text-base text-[#2C3333]/50 md:text-lg">
           Look around, you&apos;ll want one.
         </p>
-      </motion.div>
+      </m.div>
 
       {/* Top border */}
       <div className="h-px w-full bg-[#C6C6C6]/50" />
 
       {/* Projects Accordion */}
-      <motion.div
+      <m.div
         variants={{
           hidden: { opacity: 0 },
           visible: {
@@ -295,7 +295,7 @@ export default function RecentWorks() {
         {projects.map((project, index) => (
           <ProjectRow key={project.id} project={project} index={index} />
         ))}
-      </motion.div>
+      </m.div>
     </section>
   );
 }

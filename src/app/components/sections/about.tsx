@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { sendGAEvent } from '@next/third-parties/google';
 
 import { ArrowUpRight, BookOpen, Briefcase, Code2, Zap } from 'lucide-react';
-import { motion, useInView } from 'motion/react';
+import { m, useInView } from 'motion/react';
 
 import { CalendlyModal } from '@/components/calendly-modal';
 
@@ -88,14 +88,14 @@ export default function About() {
 
       <div className="mx-auto grid max-w-6xl grid-cols-1 gap-12 md:grid-cols-2 md:gap-14 lg:gap-20">
         {/* Left — photo + story */}
-        <motion.div
+        <m.div
           className="flex flex-col items-center gap-8 md:items-start"
           variants={fadeInUp}
           initial="hidden"
           animate={isInView ? 'visible' : 'hidden'}
         >
           <div className="relative w-fit">
-            <motion.div
+            <m.div
               className="rotating-gradient-border relative h-[280px] w-[240px] overflow-hidden rounded-full border-4 border-white bg-gray-100 md:h-[340px] md:w-[300px]"
               whileHover={{
                 rotate: [0, -10, 10, -10, 0],
@@ -110,15 +110,15 @@ export default function About() {
                 sizes="(max-width: 768px) 240px, 300px"
                 loading="lazy"
               />
-            </motion.div>
-            <motion.div
+            </m.div>
+            <m.div
               className="font-family-alegreya absolute -top-3 -right-4 w-fit rounded-full bg-white p-3 text-sm leading-[100%] tracking-tighter whitespace-nowrap shadow-md md:p-4 md:text-xl"
               style={{ transform: 'rotate(-5deg)' }}
               whileHover={{ scale: 1.1, rotate: 0 }}
               transition={{ type: 'spring', stiffness: 300 }}
             >
               Jeremiah Okon👋🏿
-            </motion.div>
+            </m.div>
           </div>
 
           {/* Story — three beats */}
@@ -146,17 +146,17 @@ export default function About() {
               turns more of them into customers.
             </p>
           </div>
-        </motion.div>
+        </m.div>
 
         {/* Right — quick facts + CTA */}
-        <motion.div
+        <m.div
           className="flex flex-col gap-4 self-center"
           variants={staggerContainer}
           initial="hidden"
           animate={isInView ? 'visible' : 'hidden'}
         >
           {facts.map(({ icon: Icon, label, value }) => (
-            <motion.div
+            <m.div
               key={label}
               variants={itemVariants}
               className="flex items-center gap-4 rounded-2xl border border-[#2C3333]/10 bg-[#2C3333]/[0.03] p-5 backdrop-blur-sm transition-colors duration-500 hover:border-[#7BB6DD]/40 hover:bg-[#2C3333]/[0.06] md:p-6"
@@ -172,10 +172,10 @@ export default function About() {
                   {value}
                 </span>
               </div>
-            </motion.div>
+            </m.div>
           ))}
 
-          <motion.button
+          <m.button
             type="button"
             variants={itemVariants}
             onClick={() => {
@@ -194,8 +194,8 @@ export default function About() {
           >
             Ask Me Anything
             <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-          </motion.button>
-        </motion.div>
+          </m.button>
+        </m.div>
       </div>
 
       <CalendlyModal

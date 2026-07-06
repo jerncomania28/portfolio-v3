@@ -6,6 +6,7 @@ import type { Metadata } from 'next';
 
 import Footer from '@/components/footer';
 import Header from '@/components/header';
+import MotionProvider from '@/components/motion-provider';
 import StructuredData from '@/components/structured-data';
 
 import { SITE_URL } from '@/lib/constant';
@@ -180,14 +181,18 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-pt-0 scroll-smooth">
       <head>
+        <link rel="preconnect" href="https://cdn.simpleicons.org" />
+        <link rel="preconnect" href="https://cdn.jsdelivr.net" />
         <StructuredData />
       </head>
       <body
         className={`${neueMontreal.variable} ${alegreyaSans.variable} ${inter.variable} ${playfairDisplay.variable} ${instrumentSerif.variable} snap-y snap-mandatory overflow-x-hidden antialiased`}
       >
-        <Header />
-        <main>{children}</main>
-        <Footer />
+        <MotionProvider>
+          <Header />
+          <main>{children}</main>
+          <Footer />
+        </MotionProvider>
 
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID!} />
       </body>

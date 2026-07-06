@@ -3,7 +3,7 @@
 import { sendGAEvent } from '@next/third-parties/google';
 
 import { ArrowUpRight } from 'lucide-react';
-import { motion } from 'motion/react';
+import { m } from 'motion/react';
 
 import { UPWORK_PROFILE_URL } from '@/lib/constant';
 import { useCountUp, useReducedMotion } from '@/lib/hooks';
@@ -80,7 +80,7 @@ function StatItem({ stat, index }: { stat: Stat; index: number }) {
   );
 
   return (
-    <motion.div
+    <m.div
       ref={ref}
       className="flex flex-col items-center gap-2 text-center"
       initial={prefersReducedMotion ? undefined : { opacity: 0, y: 20 }}
@@ -110,7 +110,7 @@ function StatItem({ stat, index }: { stat: Stat; index: number }) {
       ) : (
         content
       )}
-    </motion.div>
+    </m.div>
   );
 }
 
