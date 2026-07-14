@@ -192,7 +192,7 @@ function ProjectRow({ project, index }: { project: Project; index: number }) {
               src={project.image}
               alt={project.name}
               fill
-              className="object-cover"
+              className="object-cover object-top"
               sizes="560px"
               quality={90}
             />
@@ -216,7 +216,7 @@ function ProjectRow({ project, index }: { project: Project; index: number }) {
               src={project.image}
               alt={project.name}
               fill
-              className="object-cover"
+              className="object-cover object-top"
               sizes="100vw"
             />
           </div>
