@@ -21,11 +21,14 @@ import {
 } from './animated-icons';
 
 // The input is streamed into ffmpeg via a WORKERFS mount (read by reference,
-// never copied into WASM memory), so the input size is no longer bound by the
-// ~2 GB linear-memory ceiling. The binding constraint is the MP3 output +
-// ffmpeg's working buffers, which stay small for audio-only (`-vn`) jobs.
-// 2 GB is a conservative, browser-safe headroom cap — tune freely.
-const MAX_FILE_SIZE = 2 * 1024 * 1024 * 1024; // 2 GB
+// never copied into WASM memory), and `-vn` means the video stream is never
+// decoded — only the audio is. So neither the WASM heap (2 GB ceiling, holds
+// just the small MP3 output + working buffers) nor CPU is the binding limit;
+// verified locally: a 961 MB clip extracted in ~7 s with ~40 MB peak JS heap.
+// The real constraint is client hardware — mobile browsers kill tabs that hold
+// very large files while running WASM. 1 GB is the mobile-safe sweet spot that
+// still covers essentially any realistic "extract audio from a video" input.
+const MAX_FILE_SIZE = 1024 * 1024 * 1024; // 1 GB
 const ACCEPTED_EXTENSIONS = ['.mp4', '.mov', '.mkv', '.avi', '.webm', '.m4v'];
 
 type Status = 'idle' | 'loading-engine' | 'processing' | 'done';
@@ -89,16 +92,18 @@ export default function AudioExtractor() {
       console.warn('[ffmpeg]', message);
     });
 
+    // Single-threaded core: no SharedArrayBuffer, so the page needs no
+    // cross-origin isolation (COOP/COEP) headers. That deliberately avoids the
+    // multi-threaded core's module-worker chunk, which Vercel's edge blocks with
+    // ERR_BLOCKED_BY_RESPONSE in a require-corp context — the extractor hung on
+    // "Warming up the audio engine" in production as a result. There is no
+    // ffmpeg-core.worker.js in the single-threaded build, so no workerURL.
     const baseURL = '/ffmpeg';
     await ffmpeg.load({
       coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript'),
       wasmURL: await toBlobURL(
         `${baseURL}/ffmpeg-core.wasm`,
         'application/wasm'
-      ),
-      workerURL: await toBlobURL(
-        `${baseURL}/ffmpeg-core.worker.js`,
-        'text/javascript'
       ),
     });
 
@@ -120,7 +125,7 @@ export default function AudioExtractor() {
       }
       if (file.size > MAX_FILE_SIZE) {
         setError(
-          `File is too large (${formatBytes(file.size)}). The limit is 2 GB — try a shorter clip.`
+          `File is too large (${formatBytes(file.size)}). The limit is 1 GB — try a shorter clip.`
         );
 
         return;
@@ -167,8 +172,8 @@ export default function AudioExtractor() {
         ]);
 
         const data = await ffmpeg.readFile(outputName);
-        // Copy into a fresh Uint8Array — with the multi-threaded core the FS
-        // data can be backed by a SharedArrayBuffer, which Blob rejects.
+        // Copy into a fresh Uint8Array so the Blob owns its bytes independently
+        // of ffmpeg's WASM heap (which is freed/reused after this call).
         const bytes = new Uint8Array(data as Uint8Array);
         const blob = new Blob([bytes], { type: 'audio/mpeg' });
         const url = URL.createObjectURL(blob);
@@ -405,7 +410,7 @@ export default function AudioExtractor() {
               </Button>
 
               <p className="font-family-inter relative text-xs text-[#2C3333]/40">
-                MP4 · MOV · MKV · AVI · WEBM · M4V — up to 2 GB
+                MP4 · MOV · MKV · AVI · WEBM · M4V — up to 1 GB
               </p>
 
               <input
