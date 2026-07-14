@@ -181,7 +181,10 @@ export default function AudioExtractor() {
         setResult({ url, name: outputName });
         setProgress(100);
         setStatus('done');
-      } catch {
+      } catch (err) {
+        // Surface the real cause — the friendly copy below hides it, and this
+        // path swallowed a cross-origin-isolation failure once already.
+        console.error('[audio-extractor] extraction failed', err);
         setError(
           'Extraction failed — the file may be too large or in an unsupported format.'
         );
