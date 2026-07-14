@@ -1,6 +1,13 @@
 {
-  "generatedAt": "2026-07-05T12:51:41.490Z",
+  "generatedAt": "2026-07-14T08:25:49.309Z",
   "videos": [
+    {
+      "id": "Hn4ZPBhCKpk",
+      "title": "Before you Judge, Try it!",
+      "viewCount": 14,
+      "thumbnailUrl": "https://i.ytimg.com/vi/Hn4ZPBhCKpk/maxresdefault.jpg",
+      "publishedAt": "2026-07-14T07:15:49Z"
+    },
     {
       "id": "AOH6HErQQK4",
       "title": "Don't Underestimate your Competition!",
@@ -18,7 +25,7 @@
     {
       "id": "2xFkMccBZo0",
       "title": "Keep Going at It!",
-      "viewCount": 3,
+      "viewCount": 4,
       "thumbnailUrl": "https://i.ytimg.com/vi/2xFkMccBZo0/maxresdefault.jpg",
       "publishedAt": "2026-06-26T14:41:43Z"
     },
@@ -35,13 +42,6 @@
       "viewCount": 2,
       "thumbnailUrl": "https://i.ytimg.com/vi/QWuZ9gC0B94/maxresdefault.jpg",
       "publishedAt": "2026-06-26T14:28:23Z"
-    },
-    {
-      "id": "CuOJ4VC9RkY",
-      "title": "https://www.jeremiahokon.online/",
-      "viewCount": 18,
-      "thumbnailUrl": "https://i.ytimg.com/vi/CuOJ4VC9RkY/maxresdefault.jpg",
-      "publishedAt": "2026-04-27T15:29:08Z"
     }
   ]
 }

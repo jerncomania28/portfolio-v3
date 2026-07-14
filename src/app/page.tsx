@@ -9,6 +9,7 @@ import Services from './components/sections/services';
 import Skills from './components/sections/skills';
 import Stats from './components/sections/stats';
 import Testimonials from './components/sections/testimonials';
+import Tools from './components/sections/tools';
 import YouTubeVideo from './components/sections/youtube-video';
 
 export default async function Home() {
@@ -47,6 +48,7 @@ export default async function Home() {
       <Skills />
       <Services />
       <RecentWorks />
+      <Tools />
       <Stats />
       <Testimonials />
       <ContentCreation videos={shortsData} />

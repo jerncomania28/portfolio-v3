@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { sendGAEvent } from '@next/third-parties/google';
 
 import { SlashIcon, X } from 'lucide-react';
@@ -21,12 +22,18 @@ import { LocalTimeClock } from '@/ui/local-time-clock';
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const isHome = pathname === '/';
+
+  // On the home page these are in-page anchors we scroll to smoothly. On any
+  // other route (e.g. /extract-audio) there is nothing to scroll to, so the
+  // links point at `/#id` and we let the browser navigate home instead.
+  const hashHref = (id: string) => (isHome ? `#${id}` : `/#${id}`);
 
   const handleNavClick = (
     e: React.MouseEvent<HTMLAnchorElement>,
     id: string
   ) => {
-    e.preventDefault();
     setIsMobileMenuOpen(false);
     sendGAEvent({
       event: 'nav_click',
@@ -35,6 +42,8 @@ export default function Header() {
       event_category: 'engagement',
       event_label: 'nav_link',
     });
+    if (!isHome) return; // let the anchor navigate to `/#id`
+    e.preventDefault();
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -46,6 +55,7 @@ export default function Header() {
     { id: 'about', label: 'About' },
     { id: 'services', label: 'Services' },
     { id: 'work', label: 'Work' },
+    { id: 'tools', label: 'Tools' },
     { id: 'reviews', label: 'Reviews' },
     { id: 'content', label: 'Content' },
     { id: 'contact', label: 'Contact' },
@@ -58,6 +68,7 @@ export default function Header() {
     { id: 'about', label: 'About' },
     { id: 'services', label: 'Services', wideOnly: true },
     { id: 'work', label: 'Work' },
+    { id: 'tools', label: 'Tools' },
     { id: 'reviews', label: 'Reviews', wideOnly: true },
     { id: 'contact', label: 'Contact' },
   ];
@@ -66,7 +77,7 @@ export default function Header() {
     <>
       <header className="relative z-50 flex w-full items-center justify-between px-4 py-4 md:items-start md:px-10 md:pt-10 md:pb-5">
         <m.a
-          href="#home"
+          href={hashHref('home')}
           onClick={(e) => handleNavClick(e, 'home')}
           className="group relative cursor-pointer"
           whileHover={{ scale: 1.05 }}
@@ -119,7 +130,7 @@ export default function Header() {
                     className="active:text-footer-background hover:text-footer-background cursor-pointer transition-colors"
                   >
                     <a
-                      href={`#${link.id}`}
+                      href={hashHref(link.id)}
                       onClick={(e) => handleNavClick(e, link.id)}
                     >
                       {link.label}
@@ -181,7 +192,7 @@ export default function Header() {
               {navLinks.map((link) => (
                 <m.a
                   key={link.id}
-                  href={`#${link.id}`}
+                  href={hashHref(link.id)}
                   onClick={(e) => handleNavClick(e, link.id)}
                   className="text-4xl font-bold tracking-tighter text-white transition-colors hover:text-gray-300"
                   variants={{
