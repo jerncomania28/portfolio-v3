@@ -179,7 +179,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-pt-0 scroll-smooth">
+    <html lang="en" className="scroll-pt-0">
       <head>
         <link rel="preconnect" href="https://cdn.simpleicons.org" />
         <link rel="preconnect" href="https://cdn.jsdelivr.net" />

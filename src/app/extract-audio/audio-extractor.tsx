@@ -13,12 +13,7 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/ui/button';
 import { Progress } from '@/ui/progress';
 
-import {
-  DownloadArrowAnim,
-  EqualizerBars,
-  SuccessCheck,
-  UploadCloudAnim,
-} from './animated-icons';
+import { EqualizerBars, SuccessCheck, UploadCloudAnim } from './animated-icons';
 
 // The input is streamed into ffmpeg via a WORKERFS mount (read by reference,
 // never copied into WASM memory), and `-vn` means the video stream is never
@@ -64,7 +59,6 @@ export default function AudioExtractor() {
   const [result, setResult] = useState<{ url: string; name: string } | null>(
     null
   );
-  const [downloadHover, setDownloadHover] = useState(false);
 
   const reduced = useReducedMotion();
 
@@ -264,11 +258,8 @@ export default function AudioExtractor() {
                 <a
                   href={result.url}
                   download={result.name}
-                  onMouseEnter={() => setDownloadHover(true)}
-                  onMouseLeave={() => setDownloadHover(false)}
                   className="group inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#7BB6DD] to-[#5BA4D1] px-8 py-3.5 text-sm font-bold tracking-wide text-white uppercase shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_40px_rgba(123,182,221,0.45)]"
                 >
-                  <DownloadArrowAnim hovered={downloadHover} />
                   Download MP3
                 </a>
                 <Button

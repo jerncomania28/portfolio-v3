@@ -96,6 +96,42 @@ body {
   display: none;
 }
 
+/* Premium scrollbar — the track blends into the page background so it reads as
+   part of the surface, and the thumb is a slim, soft pill of the dark brand
+   colour that darkens on hover. A track-coloured border insets the thumb so it
+   stays thin without a hard edge. Firefox gets the `scrollbar-*` equivalents. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--footer-background) 30%, transparent)
+    var(--background);
+}
+
+::-webkit-scrollbar {
+  width: 11px;
+  height: 11px;
+}
+
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-corner {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: color-mix(in srgb, var(--footer-background) 30%, transparent);
+  background-clip: padding-box;
+  border: 3px solid transparent;
+  border-radius: 9999px;
+  transition: background-color 0.25s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: color-mix(in srgb, var(--footer-background) 55%, transparent);
+}
+
+::-webkit-scrollbar-thumb:active {
+  background-color: color-mix(in srgb, var(--footer-background) 70%, transparent);
+}
+
 .dark {
   --background: oklch(0.13 0.028 261.692);
   --foreground: oklch(0.985 0.002 247.839);
