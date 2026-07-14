@@ -8,10 +8,24 @@ import { m, useMotionValue, useSpring } from 'motion/react';
 
 import { CalendlyModal } from '@/components/calendly-modal';
 
-import { BOOK_A_CALL } from '@/lib/constant';
+import { BOOK_A_CALL, UPWORK_PROFILE_URL } from '@/lib/constant';
 import { useReducedMotion } from '@/lib/hooks';
 
 import { ScrollButton } from '@/ui/scroll-button';
+
+function UpworkIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      role="img"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      fill="currentColor"
+      className={className}
+    >
+      <path d="M18.561 13.158c-1.102 0-2.135-.467-3.074-1.227l.228-1.076.008-.042c.207-1.143.849-3.06 2.839-3.06a2.705 2.705 0 0 1 2.703 2.703 2.707 2.707 0 0 1-2.704 2.702zm0-8.14c-2.539 0-4.51 1.649-5.31 4.366-1.22-1.834-2.148-4.036-2.687-5.892H7.828v7.112a2.551 2.551 0 0 1-2.547 2.548 2.55 2.55 0 0 1-2.545-2.548V3.492H0v7.112c0 3 2.443 5.489 5.443 5.489a5.505 5.505 0 0 0 5.446-5.489v-1.19c.529 1.107 1.182 2.229 1.974 3.221l-1.673 7.873h2.797l1.213-5.71c1.063.679 2.285 1.109 3.686 1.109 3 0 5.439-2.452 5.439-5.45 0-3-2.439-5.45-5.439-5.45z" />
+    </svg>
+  );
+}
 
 export default function Hero() {
   const [isCalendlyOpen, setIsCalendlyOpen] = useState(false);
@@ -67,6 +81,31 @@ export default function Hero() {
         <p className="font-family-inter text-center text-xs font-medium tracking-[0.3em] text-[#2C3333]/60 uppercase md:text-sm">
           Jeremiah Okon — Frontend Developer · React &amp; Next.js Expert
         </p>
+
+        <m.a
+          href={UPWORK_PROFILE_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() => {
+            sendGAEvent({
+              event: 'upwork_click',
+              value: 'Hire me on Upwork',
+              click_location: 'hero',
+              event_category: 'engagement',
+              event_label: 'hero_upwork_badge',
+            });
+          }}
+          className="inline-flex items-center gap-2.5 rounded-full border border-[#14A800]/25 bg-[#14A800]/10 px-4 py-2 text-sm font-semibold text-[#14A800] shadow-sm backdrop-blur-sm transition-all duration-300 hover:border-[#14A800]/50 hover:bg-[#14A800]/15 hover:shadow-[0_0_30px_rgba(20,168,0,0.25)] md:text-base"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4, duration: 0.6 }}
+          whileHover={prefersReducedMotion ? undefined : { scale: 1.04 }}
+          whileTap={prefersReducedMotion ? undefined : { scale: 0.97 }}
+          aria-label="View my Upwork profile"
+        >
+          <UpworkIcon className="h-5 w-5 md:h-[1.4rem] md:w-[1.4rem]" />
+          <span>Hire me on Upwork</span>
+        </m.a>
         <h1 className="text-footer-background text-[clamp(4.5rem,12vw,12.5rem)] leading-[100%] font-bold tracking-tighter">
           {words.map((word, index) => (
             <span
