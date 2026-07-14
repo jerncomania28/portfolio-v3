@@ -1,40 +1,57 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { sendGAEvent } from '@next/third-parties/google';
 
-import { SlashIcon, X } from 'lucide-react';
 import { AnimatePresence, m } from 'motion/react';
 
 import { EMAIL } from '@/lib/constant';
+import { useReducedMotion } from '@/lib/hooks';
 
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbSeparator,
-} from '@/ui/breadcrumb';
-import { Button } from '@/ui/button';
 import { LocalTimeClock } from '@/ui/local-time-clock';
 
 export default function Header() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
   const isHome = pathname === '/';
+  const reduced = useReducedMotion();
 
   // On the home page these are in-page anchors we scroll to smoothly. On any
   // other route (e.g. /extract-audio) there is nothing to scroll to, so the
   // links point at `/#id` and we let the browser navigate home instead.
   const hashHref = (id: string) => (isHome ? `#${id}` : `/#${id}`);
 
+  // Lock body scroll while the full-screen menu is open, and let Escape close
+  // it. Hiding overflow removes the scrollbar, so we pad the body by its width
+  // to avoid a jump. Both are tiny effects — no libraries, negligible JS cost.
+  useEffect(() => {
+    if (!isMenuOpen) return;
+    const { overflow, paddingRight } = document.body.style;
+    const scrollbarWidth =
+      window.innerWidth - document.documentElement.clientWidth;
+    document.body.style.overflow = 'hidden';
+    if (scrollbarWidth > 0) {
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
+    }
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsMenuOpen(false);
+    };
+    window.addEventListener('keydown', onKey);
+
+    return () => {
+      document.body.style.overflow = overflow;
+      document.body.style.paddingRight = paddingRight;
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [isMenuOpen]);
+
   const handleNavClick = (
     e: React.MouseEvent<HTMLAnchorElement>,
     id: string
   ) => {
-    setIsMobileMenuOpen(false);
+    setIsMenuOpen(false);
     sendGAEvent({
       event: 'nav_click',
       value: id,
@@ -61,17 +78,36 @@ export default function Header() {
     { id: 'contact', label: 'Contact' },
   ];
 
-  // Desktop keeps the nav compact so the header doesn't crowd the hero:
-  // core links always show, secondary ones only on wide screens, and the
-  // full list lives in the mobile menu (the JO logo anchors to #home).
-  const desktopLinks: { id: string; label: string; wideOnly?: boolean }[] = [
-    { id: 'about', label: 'About' },
-    { id: 'services', label: 'Services', wideOnly: true },
-    { id: 'work', label: 'Work' },
-    { id: 'tools', label: 'Tools' },
-    { id: 'reviews', label: 'Reviews', wideOnly: true },
-    { id: 'contact', label: 'Contact' },
-  ];
+  // The circle grows from the toggle button (top-right) so the overlay reads as
+  // an expansion of the hamburger itself. Reduced-motion users get a plain fade.
+  const CIRCLE_ORIGIN = 'at 92% 6%';
+  // A gentle ease-in-out so the circle accelerates and settles softly rather
+  // than snapping. Opening: a faint crossfade softens the growing circle's
+  // edge. Closing: the circle stays fully opaque and contracts back into the
+  // button, so the menu retracts the same way it projected out.
+  const SMOOTH = [0.33, 0, 0.15, 1] as const;
+  const overlayMotion = reduced
+    ? {
+        initial: { opacity: 0 },
+        animate: { opacity: 1, transition: { duration: 0.25 } },
+        exit: { opacity: 0, transition: { duration: 0.25 } },
+      }
+    : {
+        initial: { clipPath: `circle(0% ${CIRCLE_ORIGIN})`, opacity: 0 },
+        animate: {
+          clipPath: `circle(150% ${CIRCLE_ORIGIN})`,
+          opacity: 1,
+          transition: {
+            clipPath: { duration: 0.7, ease: SMOOTH },
+            opacity: { duration: 0.25, ease: 'easeOut' as const },
+          },
+        },
+        exit: {
+          clipPath: `circle(0% ${CIRCLE_ORIGIN})`,
+          opacity: 1,
+          transition: { clipPath: { duration: 0.6, ease: SMOOTH } },
+        },
+      };
 
   return (
     <>
@@ -93,6 +129,7 @@ export default function Header() {
             transition={{ duration: 0.3 }}
           />
         </m.a>
+
         <div className="flex flex-col items-center justify-center gap-3">
           <LocalTimeClock />
           <Link
@@ -113,69 +150,48 @@ export default function Header() {
           </Link>
         </div>
 
-        <Breadcrumb className="hidden md:inline-block">
-          <BreadcrumbList className="text-base leading-[100%] font-normal -tracking-[2%] text-[#666666B2] lg:text-lg">
-            {desktopLinks.map((link, index) => (
-              <div
-                key={link.id}
-                className={
-                  link.wideOnly
-                    ? 'hidden items-center xl:flex'
-                    : 'flex items-center'
-                }
-              >
-                <BreadcrumbItem>
-                  <BreadcrumbLink
-                    asChild
-                    className="active:text-footer-background hover:text-footer-background cursor-pointer transition-colors"
-                  >
-                    <a
-                      href={hashHref(link.id)}
-                      onClick={(e) => handleNavClick(e, link.id)}
-                    >
-                      {link.label}
-                    </a>
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                {index < desktopLinks.length - 1 && (
-                  <BreadcrumbSeparator>
-                    <SlashIcon className="text-footer-background" />
-                  </BreadcrumbSeparator>
-                )}
-              </div>
-            ))}
-          </BreadcrumbList>
-        </Breadcrumb>
-
-        <Button
-          variant="link"
-          className="text-footer-background inline-block px-0 py-0 text-xl leading-[100%] font-normal -tracking-[2%] md:hidden"
-          onClick={() => setIsMobileMenuOpen(true)}
+        {/* Animated hamburger — the only nav control on every breakpoint. */}
+        <button
+          type="button"
+          aria-label="Open menu"
+          aria-expanded={isMenuOpen}
+          aria-controls="site-menu"
+          onClick={() => setIsMenuOpen(true)}
+          className="group text-footer-background relative flex h-8 w-9 cursor-pointer items-center justify-center"
         >
-          Menu
-        </Button>
+          <span className="sr-only">Menu</span>
+          <span className="relative block h-[14px] w-7" aria-hidden="true">
+            <span className="absolute top-0 left-0 h-0.5 w-full origin-center rounded-full bg-current transition-all duration-300 group-hover:w-5" />
+            <span className="absolute bottom-0 left-0 h-0.5 w-full rounded-full bg-current transition-all duration-300 group-hover:w-full" />
+          </span>
+        </button>
       </header>
 
-      {/* Mobile Menu */}
+      {/* Full-screen menu with a circular reveal that grows from the button. */}
       <AnimatePresence>
-        {isMobileMenuOpen && (
+        {isMenuOpen && (
           <m.div
-            className="bg-footer-background fixed inset-0 z-[100] flex flex-col items-center justify-center md:hidden"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
+            id="site-menu"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Site navigation"
+            className="bg-footer-background fixed inset-0 z-[100] flex flex-col items-center justify-center"
+            {...overlayMotion}
           >
-            <Button
-              variant="ghost"
-              className="absolute top-4 right-4 text-white hover:bg-white/10"
-              onClick={() => setIsMobileMenuOpen(false)}
+            <button
+              type="button"
+              aria-label="Close menu"
+              onClick={() => setIsMenuOpen(false)}
+              className="group absolute top-4 right-4 flex h-11 w-11 cursor-pointer items-center justify-center rounded-full text-white transition-colors hover:bg-white/10 md:top-9 md:right-9"
             >
-              <X className="h-8 w-8" />
-            </Button>
+              <span className="relative block h-5 w-5" aria-hidden="true">
+                <span className="absolute top-1/2 left-0 h-0.5 w-full -translate-y-1/2 rotate-45 rounded-full bg-current transition-transform duration-300 group-hover:rotate-[135deg]" />
+                <span className="absolute top-1/2 left-0 h-0.5 w-full -translate-y-1/2 -rotate-45 rounded-full bg-current transition-transform duration-300 group-hover:rotate-[-135deg]" />
+              </span>
+            </button>
 
             <m.nav
-              className="flex flex-col items-center gap-5"
+              className="flex flex-col items-center gap-4 md:gap-5"
               initial="hidden"
               animate="visible"
               variants={{
@@ -183,8 +199,8 @@ export default function Header() {
                 visible: {
                   opacity: 1,
                   transition: {
-                    staggerChildren: 0.1,
-                    delayChildren: 0.2,
+                    staggerChildren: 0.05,
+                    delayChildren: reduced ? 0 : 0.25,
                   },
                 },
               }}
@@ -194,20 +210,20 @@ export default function Header() {
                   key={link.id}
                   href={hashHref(link.id)}
                   onClick={(e) => handleNavClick(e, link.id)}
-                  className="text-4xl font-bold tracking-tighter text-white transition-colors hover:text-gray-300"
+                  className="cursor-pointer text-3xl font-bold tracking-tighter text-white transition-colors hover:text-gray-300 md:text-4xl"
                   variants={{
-                    hidden: { opacity: 0, y: 20 },
+                    hidden: { opacity: 0, y: reduced ? 0 : 24 },
                     visible: {
                       opacity: 1,
                       y: 0,
                       transition: {
-                        duration: 0.6,
-                        ease: [0.22, 1, 0.36, 1] as const,
+                        duration: 0.7,
+                        ease: [0.16, 1, 0.3, 1] as const,
                       },
                     },
                   }}
-                  whileHover={{ x: 10 }}
-                  transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                  whileHover={reduced ? undefined : { x: 10 }}
+                  transition={{ type: 'spring', stiffness: 260, damping: 24 }}
                 >
                   {link.label}
                 </m.a>
@@ -218,9 +234,9 @@ export default function Header() {
               className="absolute bottom-8 text-sm text-white/60"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
+              transition={{ delay: reduced ? 0 : 0.5 }}
             >
-              Tap anywhere to navigate
+              Tap a link to navigate
             </m.div>
           </m.div>
         )}
